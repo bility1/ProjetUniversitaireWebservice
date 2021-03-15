@@ -1,0 +1,91 @@
+version: "3"
+services:
+  dc-mysql-auth:
+    container_name: dc-mysql-auth
+    build: mysql/
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=auth
+    ports:
+      - "3308:3306"
+    networks:
+      - emp
+    restart: always
+
+  dc-mysql-art:
+    container_name: dc-mysql-art
+    build: mysql/
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=art
+    ports:
+      - "3309:3306"
+    networks:
+      - emp
+    restart: always
+
+  dc-mongodb:
+    build: mongo/
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: review
+    networks:
+      - emp
+    ports:
+      - 27017:27017
+
+  discovery:
+    image: consul:1.7
+    networks:
+      - emp
+    ports:
+      - 8500:8500
+
+  art-service:
+    image: art-microservices/art-service
+    environment:
+      - JAVA_TOOL_OPTIONS=
+        -DCONSUL_HOST=discovery
+    networks:
+      - emp
+    depends_on:
+      - discovery
+      - dc-mysql-art
+
+  auth-service:
+    image: art-microservices/auth-service
+    environment:
+      - JAVA_TOOL_OPTIONS=
+        -DCONSUL_HOST=discovery
+    networks:
+      - emp
+    depends_on:
+      - discovery
+      - dc-mysql-auth
+
+  review-service:
+    image: art-microservices/review-service
+    environment:
+      - JAVA_TOOL_OPTIONS=
+        -DCONSUL_HOST=discovery
+    networks:
+      - emp
+    depends_on:
+      - discovery
+      - dc-mongodb
+
+  gateway:
+    image: art-microservices/gateway
+    environment:
+      - JAVA_TOOL_OPTIONS=
+        -DCONSUL_HOST=discovery
+    networks:
+      - emp
+    depends_on:
+      - discovery
+
+networks:
+  emp:
