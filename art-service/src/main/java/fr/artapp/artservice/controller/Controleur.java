@@ -51,13 +51,24 @@ public class Controleur {
     @GetMapping(value = "/oeuvres/{categorie}", params = "category")
     public ResponseEntity<Collection<Oeuvre>> getAllOeuvreByCategorie(@RequestParam ("category") Categorie categorie) {
         Collection<Oeuvre> oeuvre = artService.getAllOeuvreByCategorie(categorie);
-        return ResponseEntity.ok(oeuvre);
+        if (oeuvre!=null){
+            return ResponseEntity.ok(oeuvre);
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
     }
 
     @GetMapping(value = "/oeuvres/{title}")
     public ResponseEntity<Collection<Oeuvre>> getAllOeuvreBytitle(@PathVariable String titre) {
         Collection<Oeuvre> oeuvre = artService.getAllOeuvreByTitre(titre);
-        return ResponseEntity.ok(oeuvre);
+
+        if(oeuvre!=null){
+            return ResponseEntity.ok(oeuvre);
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
     }
 
 
