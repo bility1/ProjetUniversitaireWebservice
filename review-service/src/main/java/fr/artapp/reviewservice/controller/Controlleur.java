@@ -48,9 +48,7 @@ public class Controlleur {
     @GetMapping(value = "/avis")
     @ResponseStatus(HttpStatus.OK)
     public Collection<Review> getAllAvis() {
-
         return reviewService.getAllReview();
-
     }
 
 }

@@ -19,8 +19,6 @@ public class Review {
     @Field(value = "idUtilisateur")
     private Long idUtilisateur;
 
-
-
     public Review() {
     }
 
