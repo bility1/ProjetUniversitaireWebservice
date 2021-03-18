@@ -1,9 +1,6 @@
 package fr.artapp.artservice.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,11 +11,20 @@ public class Oeuvre {
     //@Column (name = "titre")
     private String titre;
     private LocalDateTime date;
-    //private Categorie categorie;
+    @ManyToOne
+    private Categorie categorie;
     private Long userId;
 
+    public Oeuvre (String titre){
+        this.titre=titre;
+    }
+    public Categorie getCategorie() {
+        return categorie;
+    }
 
-
+    public void setCategorie(Categorie categorie) {
+        this.categorie = categorie;
+    }
 
     public String getTitre() {
         return titre;

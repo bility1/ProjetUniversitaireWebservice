@@ -10,8 +10,9 @@ import java.util.Collection;
 
 @Repository
 public interface OeuvreRepository  extends CrudRepository<Oeuvre,Long> {
-    /*Collection<Oeuvre> findAllByTitre(String title);
     Collection<Oeuvre> findAllByCategorie(Categorie categorie);
-    */
+    Collection<Oeuvre> findAllByTitre(String title);
+
+
 }
 

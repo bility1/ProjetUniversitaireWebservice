@@ -47,7 +47,7 @@ public class Controleur {
         return ResponseEntity.created(location).body(oeuvre);
     }
 
-    /*
+
     @GetMapping(value = "/oeuvres/{categorie}", params = "category")
     public ResponseEntity<Collection<Oeuvre>> getAllOeuvreByCategorie(@RequestParam ("category") Categorie categorie) {
         Collection<Oeuvre> oeuvre = artService.getAllOeuvreByCategorie(categorie);
@@ -56,10 +56,10 @@ public class Controleur {
 
     @GetMapping(value = "/oeuvres/{title}")
     public ResponseEntity<Collection<Oeuvre>> getAllOeuvreBytitle(@PathVariable String titre) {
-        Collection<Oeuvre> oeuvre = artService.getAllOeuvreBytitle(titre);
+        Collection<Oeuvre> oeuvre = artService.getAllOeuvreByTitre(titre);
         return ResponseEntity.ok(oeuvre);
     }
-    */
+
 
 }
 
