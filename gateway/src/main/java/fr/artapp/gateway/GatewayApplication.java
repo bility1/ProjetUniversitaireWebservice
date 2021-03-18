@@ -26,7 +26,10 @@ public class GatewayApplication {
                         .filters(f -> f.rewritePath("/api/auth/(?<remains>.*)", "/${remains}")                                )
                         .uri("lb://auth-service")
                         .id("auth-service"))
-
+                .route(r -> r.path("/api/review/**")
+                        .filters(f -> f.rewritePath("/api/review/(?<remains>.*)", "/${remains}")                               )
+                        .uri("lb://review-service")
+                        .id("review-service"))
                 .build();
 
 

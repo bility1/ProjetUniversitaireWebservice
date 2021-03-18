@@ -1,8 +1,8 @@
 db.createUser(
-{
-    user: "root",
-    pwd: "root",
-    roles: [
-      { role: "readWrite", db: "gcm" }
-    ]
-});
+    {
+        user: "root",
+        pwd: "root",
+        roles: [
+            {role: "readWrite", db: "review"}
+        ]
+    });

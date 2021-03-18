@@ -1,0 +1,15 @@
+GET http://localhost:8080/api/art/oeuvre
+
+###
+GET http://localhost:8080/api/review/avis/subscribe
+
+###
+POST http://localhost:8080/api/review/avis
+Content-Type: application/json
+Accept: application/json
+
+{"idAvis": 2, "note": 5,"commentaire": "Magnifique","idOeuvre": 1,"idUtilisateur": 1}
+
+###
+GET http://localhost:8080/api/review/avis
+
