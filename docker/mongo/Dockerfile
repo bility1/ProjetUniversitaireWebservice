@@ -6,3 +6,5 @@ FROM mongo:latest
 # All scripts in docker-entrypoint-initdb.d/ are automatically
 # executed during container startup
 #COPY ./mongo_script/ /docker-entrypoint-initdb.d/
+#COPY ./mongo_script/create-user.js /docker-entrypoint-initdb.d/
+COPY mongo_script/create-collection.js /docker-entrypoint-initdb.d/
