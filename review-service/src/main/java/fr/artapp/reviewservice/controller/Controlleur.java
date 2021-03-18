@@ -35,7 +35,7 @@ public class Controlleur {
     @PostMapping(value = "/avis")
     public ResponseEntity<Review> create(@RequestBody Review reviewBody, UriComponentsBuilder base) {
         int id = reviews.size();
-        reviewBody.setIdAvis((long)id);
+        reviewBody.setIdAvis(String.valueOf(id));
         reviews.add(reviewBody);
         reviewService.setReview(reviewBody);
         URI location = base.path("/api/avis/{id}").buildAndExpand(id).toUri();
