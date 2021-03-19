@@ -1,5 +1,6 @@
 package fr.artapp.artservice.service;
 
+import fr.artapp.artservice.Exception.ExceptionDejaException;
 import fr.artapp.artservice.Exception.OeuvreNotFoundException;
 import fr.artapp.artservice.model.Categorie;
 import fr.artapp.artservice.model.Oeuvre;
@@ -17,10 +18,15 @@ public interface ArtService {
 
     void suppressionOeuvre(Long id) throws OeuvreNotFoundException;
 
-    /*
-    Collection<Oeuvre> getAllOeuvreByCategorie(Categorie categorie);
-    Collection<Oeuvre> getAllOeuvreBytitle(String titre);
 
+    Collection<Oeuvre> getAllOeuvreByCategorie(Categorie categorie);
+
+
+    Collection<Oeuvre> getAllOeuvreByTitre(String titre);
+
+    Oeuvre creerOeuvre(String titre) throws ExceptionDejaException;
+
+/*
     void modifierOeuvreTitre(String title);
 
     boolean oeuvreExiste(Long id);

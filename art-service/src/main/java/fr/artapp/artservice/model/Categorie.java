@@ -1,9 +1,7 @@
 package fr.artapp.artservice.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Categorie {
@@ -12,8 +10,16 @@ public class Categorie {
     private Long id;
     private String nomCategorie;
     private String description;
+    @OneToMany(mappedBy = "categorie")
+    private Set<Oeuvre> oeuvre;
 
+    public Set<Oeuvre> getOeuvre() {
+        return oeuvre;
+    }
 
+    public void setOeuvre(Set<Oeuvre> oeuvre) {
+        this.oeuvre = oeuvre;
+    }
 
     public Long getId() {
         return id;
