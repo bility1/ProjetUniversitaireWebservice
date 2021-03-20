@@ -11,7 +11,8 @@
     <modules>
         <module>art-service</module>
         <module>review-service</module>
-	<module>gateway</module>
+	    <module>gateway</module>
+        <module>keycloak-service</module>
     </modules>
 
 </project>

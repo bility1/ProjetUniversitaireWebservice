@@ -11,6 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+import reactor.core.publisher.Mono;
+
 import java.net.URI;
 import java.util.Collection;
 import java.util.Optional;
@@ -20,6 +22,13 @@ public class Controleur  {
 
     @Autowired
     ArtService artService;
+
+
+    @GetMapping(value = "/hello")
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<String> hello(){
+        return Mono.just("hello !");
+    }
 
     @GetMapping(value = "/oeuvres")
     @ResponseStatus(HttpStatus.OK)

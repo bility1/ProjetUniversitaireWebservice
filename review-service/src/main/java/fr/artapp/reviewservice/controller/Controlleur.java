@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.core.publisher.ReplayProcessor;
 
 import java.net.URI;
@@ -27,10 +28,21 @@ public class Controlleur {
     // STREAM de notifications
     private ReplayProcessor<Review> notifications = ReplayProcessor.create(0, false);
 
+
+
+    @GetMapping(value = "/hello")
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<String> hello(){
+        return Mono.just("hello !");
+    }
+
+
     @GetMapping(value = "/avis/subscribe", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
     public Flux<Review> notification() {
         return Flux.from(notifications);
     }
+
+
 
     @PostMapping(value = "/avis")
     public ResponseEntity<Review> create(@RequestBody Review reviewBody, UriComponentsBuilder base) {
@@ -50,5 +62,8 @@ public class Controlleur {
     public Collection<Review> getAllAvis() {
         return reviewService.getAllReview();
     }
+
+
+
 
 }
