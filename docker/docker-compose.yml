@@ -1,28 +1,85 @@
 version: "3"
+
 services:
-  dc-mysql-auth:
-    container_name: dc-mysql-auth
-    build: mysql/
+  mysql:
+    image: mysql:5.7
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=auth
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: keycloak
+      MYSQL_PASSWORD: root
+    networks:
+      - defaultnet
     ports:
       - "3308:3306"
-    networks:
-      - emp
-    restart: always
 
-  dc-mysql-art:
-    container_name: dc-mysql-art
-    build: mysql/
+  dcmysql-art:
+    container_name: dcmysql-art
+    image: mysql:latest
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=art
+      - MYSQL_PASSWORD=root
     ports:
-      - "3309:3306"
+      - "3307:3306"
     networks:
-      - emp
+      - defaultnet
     restart: always
+
+  discovery:
+    image: consul:1.7
+    networks:
+      - defaultnet
+    ports:
+      - 8500:8500
+
+  keycloak:
+    container_name: keycloak
+    image: jboss/keycloak
+    volumes:
+      - ./imports:/opt/jboss/keycloak/imports
+    command:
+      - "-b 0.0.0.0 -Dkeycloak.import=/opt/jboss/keycloak/imports/realm.json -Dkeycloak.profile.feature.upload_scripts=enabled"
+    environment:
+      DB_VENDOR: MYSQL
+      DB_ADDR: mysql
+      DB_DATABASE: keycloak
+      DB_USER: root
+      DB_PASSWORD: root
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: Pa55w0rd
+      KEYCLOAK_FRONTEND_URL: http://keycloak:8080/auth
+    networks:
+      - defaultnet
+    ports:
+      - 8000:8080
+    depends_on:
+      - mysql
+      - discovery
+
+  art-service:
+    image: art-microservices/art-service
+    environment:
+      - JAVA_TOOL_OPTIONS=
+        -DCONSUL_HOST=discovery
+      - SPRING_DATASOURCE_URL=jdbc:mysql://dcmysql-art:3306/art?allowPublicKeyRetrieval=true&useSSL=false
+    networks:
+      - defaultnet
+    depends_on:
+      - dcmysql-art
+      - discovery
+
+  keycloak-service:
+    image: art-microservices/keycloak-service
+    environment:
+      - JAVA_TOOL_OPTIONS=
+        -DCONSUL_HOST=discovery
+    networks:
+      - defaultnet
+    depends_on:
+      - keycloak
+      - discovery
+    ports:
+      - 5555:5555
 
   dc-mongodb:
     build: mongo/
@@ -33,38 +90,9 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: root
       MONGO_INITDB_DATABASE: review
     networks:
-      - emp
+      - defaultnet
     ports:
       - 27017:27017
-
-  discovery:
-    image: consul:1.7
-    networks:
-      - emp
-    ports:
-      - 8500:8500
-
-  art-service:
-    image: art-microservices/art-service
-    environment:
-      - JAVA_TOOL_OPTIONS=
-        -DCONSUL_HOST=discovery
-    networks:
-      - emp
-    depends_on:
-      - discovery
-      - dc-mysql-art
-
-  auth-service:
-    image: art-microservices/auth-service
-    environment:
-      - JAVA_TOOL_OPTIONS=
-        -DCONSUL_HOST=discovery
-    networks:
-      - emp
-    depends_on:
-      - discovery
-      - dc-mysql-auth
 
   review-service:
     image: art-microservices/review-service
@@ -72,7 +100,7 @@ services:
       - JAVA_TOOL_OPTIONS=
         -DCONSUL_HOST=discovery
     networks:
-      - emp
+      - defaultnet
     depends_on:
       - discovery
       - dc-mongodb
@@ -80,14 +108,14 @@ services:
   gateway:
     image: art-microservices/gateway
     ports:
-      - 8080:8080
+      - 8089:8089
     environment:
       - JAVA_TOOL_OPTIONS=
         -DCONSUL_HOST=discovery
     networks:
-      - emp
+      - defaultnet
     depends_on:
       - discovery
 
 networks:
-  emp:
+  defaultnet:

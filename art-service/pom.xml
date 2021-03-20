@@ -7,6 +7,7 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.2.6.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
+
     </parent>
     <groupId>fr.artapp</groupId>
     <artifactId>art-service</artifactId>
@@ -14,19 +15,39 @@
     <name>art-service</name>
     <description>art service spring boot</description>
     <properties>
-        <java.version>14</java.version>
+        <java.version>11</java.version>
         <spring-cloud.version>Hoxton.SR3</spring-cloud.version>
+        <keycloak.version>11.0.0</keycloak.version>
     </properties>
 
     <dependencies>
+
+
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-spring-boot-starter</artifactId>
+            <version>${keycloak.version}</version>
+
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <version>2.3.9.RELEASE</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
+
         </dependency>
+
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-consul-discovery</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
@@ -48,6 +69,13 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
                 <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.keycloak.bom</groupId>
+                <artifactId>keycloak-adapter-bom</artifactId>
+                <version>${keycloak.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -75,7 +103,7 @@
                             <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
                         </container>
                         <from>
-                            <image>openjdk:14-alpine</image>
+                            <image>adoptopenjdk/openjdk11 </image>
                         </from>
                         <to>
                             <image>art-microservices/${project.name}</image>

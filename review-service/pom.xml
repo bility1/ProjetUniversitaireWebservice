@@ -14,7 +14,7 @@
     <name>review-service</name>
     <description>Demo project for Spring Boot</description>
     <properties>
-        <java.version>14</java.version>
+        <java.version>11</java.version>
         <spring-cloud.version>Hoxton.SR3</spring-cloud.version>
     </properties>
 
@@ -23,6 +23,15 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-consul-discovery</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
     <!--
         <dependency>
@@ -34,10 +43,7 @@
             <artifactId>spring-data-mongodb</artifactId>
         </dependency>
     -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-consul-discovery</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -62,38 +68,38 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
     <build>
-        <plugins>
+    <plugins>
+        <plugin>
+            <groupId>com.google.cloud.tools</groupId>
+            <artifactId>jib-maven-plugin</artifactId>
+            <version>2.1.0</version>
+            <executions>
+                <execution>
+                    <id>default</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>dockerBuild</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <container>
+                    <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+                </container>
+                <from>
+                    <image>adoptopenjdk/openjdk11 </image>
+                </from>
+                <to>
+                    <image>art-microservices/${project.name}</image>
 
-            <plugin>
-                <groupId>com.google.cloud.tools</groupId>
-                <artifactId>jib-maven-plugin</artifactId>
-                <version>2.1.0</version>
-                <executions>
-                    <execution>
-                        <id>default</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>dockerBuild</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <container>
-                        <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
-                    </container>
-                    <from>
-                        <image>openjdk:14-alpine</image>
-                    </from>
-                    <to>
-                        <image>art-microservices/${project.name}</image>
-                    </to>
-                </configuration>
-            </plugin>
+                </to>
+            </configuration>
+        </plugin>
 
-        </plugins>
+    </plugins>
 
-    </build>
-
+</build>
 
 </project>

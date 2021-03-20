@@ -22,11 +22,14 @@ public class GatewayApplication {
                         .uri("lb://art-service")
                         .id("art-service")
                 )
-                .route(r -> r.path("/api/auth/**")
-                        .filters(f -> f.rewritePath("/api/auth/(?<remains>.*)", "/${remains}")                                )
-                        .uri("lb://auth-service")
-                        .id("auth-service"))
+                .route( r-> r.path("/api/auth/**")
+                .filters(f->f.rewritePath("/api/auth/(?<remains>.*)","/${remains}")
+                        .preserveHostHeader()
+                )
+                .uri("lb://keycloak-service")
+                .id("keycloak-service")
 
+        )
                 .build();
 
 
