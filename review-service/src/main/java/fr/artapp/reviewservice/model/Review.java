@@ -2,7 +2,6 @@ package fr.artapp.reviewservice.model;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -10,9 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Review {
 
     @Id
-    private ObjectId id;
-    @Field(value = "idAvis")
-    private Long idAvis;
+    private String idAvis;
     @Field(value = "note")
     private Integer note;
     @Field(value = "commentaire")
@@ -22,8 +19,10 @@ public class Review {
     @Field(value = "idUtilisateur")
     private Long idUtilisateur;
 
-    public Review(Long idAvis, Integer note, String commentaire, Long idOeuvre, Long idUtilisateur) {
+    public Review() {
+    }
 
+    public Review(String idAvis, Integer note, String commentaire, Long idOeuvre, Long idUtilisateur) {
         this.idAvis = idAvis;
         this.note = note;
         this.commentaire = commentaire;
@@ -31,16 +30,11 @@ public class Review {
         this.idUtilisateur = idUtilisateur;
     }
 
-    public Review() {
-    }
-
-
-
-    public Long getIdAvis() {
+    public String getIdAvis() {
         return idAvis;
     }
 
-    public void setIdAvis(Long idAvis) {
+    public void setIdAvis(String idAvis) {
         this.idAvis = idAvis;
     }
 

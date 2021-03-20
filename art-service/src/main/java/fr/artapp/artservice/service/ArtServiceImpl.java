@@ -1,12 +1,15 @@
 package fr.artapp.artservice.service;
 
+import fr.artapp.artservice.Exception.ExceptionDejaException;
 import fr.artapp.artservice.Exception.OeuvreNotFoundException;
 import fr.artapp.artservice.model.Categorie;
 import fr.artapp.artservice.model.Oeuvre;
+import fr.artapp.artservice.repository.CategorieRepositery;
 import fr.artapp.artservice.repository.OeuvreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
@@ -17,6 +20,11 @@ public class ArtServiceImpl implements ArtService{
     @Autowired
     OeuvreRepository oeuvreRepository;
 
+    @Autowired
+    CategorieRepositery categorieRepositery;
+
+
+    private Collection<Oeuvre> lesOeuvres = new ArrayList<>();
     @Override
     public Collection<Oeuvre> getAllOeuvres() {
         return (Collection<Oeuvre>)  oeuvreRepository.findAll();
@@ -37,6 +45,9 @@ public class ArtServiceImpl implements ArtService{
         return oeuvreRepository.save(oeuvre);
     }
 
+
+
+
     @Override
     public void suppressionOeuvre(Long id) throws OeuvreNotFoundException {
         if (oeuvreRepository.existsById(id)){
@@ -46,6 +57,7 @@ public class ArtServiceImpl implements ArtService{
             throw new OeuvreNotFoundException();
         }
     }
+
 
     //Methode ajout catégorie : to do
 
@@ -60,6 +72,11 @@ public class ArtServiceImpl implements ArtService{
     /*
 
     @Override
+    public Categorie getCategorieByNomcategorie(String nomCategorie){
+        return categorieRepositery.findByNomCategorie(nomCategorie);
+    }
+
+    @Override
     public Collection<Oeuvre> getAllOeuvreByCategorie(Categorie categorie) {
         return oeuvreRepository.findAllByCategorie(categorie);
     }
@@ -67,6 +84,17 @@ public class ArtServiceImpl implements ArtService{
     @Override
     public Collection<Oeuvre> getAllOeuvreByTitre(String titre) {
         return oeuvreRepository.findAllByTitre(titre);
+    }
+
+    /*
+    @Override
+    public void modifierOeuvreTitre(String title) {
+        //to do
+    }
+
+    @Override
+    public boolean oeuvreExiste(Long id) {
+        return oeuvreRepository.existsById(id);
     }
     */
     }

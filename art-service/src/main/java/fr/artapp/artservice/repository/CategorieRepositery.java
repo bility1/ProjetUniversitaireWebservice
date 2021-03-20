@@ -5,14 +5,7 @@ import fr.artapp.artservice.model.Oeuvre;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
-
-
 @Repository
-public interface OeuvreRepository  extends CrudRepository<Oeuvre,Long> {
-    Collection<Oeuvre> findAllByCategorie(Categorie categorie);
-    Collection<Oeuvre> findAllByTitre(String title);
-
-
+public interface CategorieRepositery  extends CrudRepository<Categorie,Long> {
+    Categorie findByNomCategorie(String nomCategorie);
 }
-

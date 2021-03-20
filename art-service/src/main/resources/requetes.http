@@ -30,3 +30,20 @@ GET http://localhost:8080/api/review/avis
 
 ###
 
+POST http://localhost:8080/api/art/oeuvres
+Content-Type: application/json
+Accept: application/json
+
+{
+  "titre": "yes",
+  "userId": 1
+}
+###
+GET http://localhost:8080/api/art/oeuvres/titre/yes
+###
+GET http://localhost:8080/api/art/oeuvres/categorie
+###
+GET http://localhost:8080/api/art/oeuvres/horreur
+
+###
+GET http://localhost:8080/api/review/avis
