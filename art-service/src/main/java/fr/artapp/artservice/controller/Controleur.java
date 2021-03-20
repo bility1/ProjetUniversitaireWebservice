@@ -7,13 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 public class Controleur {
@@ -28,18 +26,28 @@ public class Controleur {
     }
 
     @GetMapping(value = "/oeuvres/{id}")
-    public ResponseEntity<Oeuvre> getOeuvreById(@PathVariable Long id) {
-        Optional<Oeuvre> oeuvre = artService.getOeuvreById(id);
-        return ResponseEntity.ok(oeuvre.get());
+    public ResponseEntity getOeuvreById(@PathVariable Long id) {
+        try {
+            Optional<Oeuvre> oeuvre = artService.getOeuvreById(id);
+            return ResponseEntity.ok(oeuvre.get());
+        }
+        catch(OeuvreNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.toString());
+        }
     }
 
     @DeleteMapping(value = "/oeuvres/{id}")
-    public ResponseEntity<Long> suppressionOeuvre(@PathVariable("id") Long id, UriComponentsBuilder base) throws OeuvreNotFoundException {
-        artService.suppressionOeuvre(id);
-        URI location = base.path("/art/oeuvres/{id}").buildAndExpand(id).toUri();
-        return ResponseEntity.created(location).body(id);
+    public ResponseEntity<String> suppressionOeuvre(@PathVariable("id") Long id) {
+        try {
+            artService.suppressionOeuvre(id);
+        }
+        catch(OeuvreNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.toString());
+        }
+        return ResponseEntity.ok().build();
     }
 
+    //to do Elodie: ajouter une exception
     @PostMapping(value = "/oeuvres")
     public ResponseEntity<Oeuvre> ajoutOeuvre(@RequestBody Oeuvre oeuvre, UriComponentsBuilder base) {
         artService.ajoutOeuvre(oeuvre);

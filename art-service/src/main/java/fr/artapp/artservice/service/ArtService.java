@@ -11,17 +11,18 @@ public interface ArtService {
 
     Collection<Oeuvre> getAllOeuvres();
 
-    Optional<Oeuvre> getOeuvreById(Long id);
+    Optional<Oeuvre> getOeuvreById(Long id) throws OeuvreNotFoundException;
 
     Oeuvre ajoutOeuvre(Oeuvre oeuvre);
 
     void suppressionOeuvre(Long id) throws OeuvreNotFoundException;
 
+    //void modifierOeuvreTitre(Long id, String title);
+
+
     /*
     Collection<Oeuvre> getAllOeuvreByCategorie(Categorie categorie);
     Collection<Oeuvre> getAllOeuvreBytitle(String titre);
-
-    void modifierOeuvreTitre(String title);
 
     boolean oeuvreExiste(Long id);
 

@@ -19,112 +19,42 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données :  `gpm`
+-- Base de données :  `art`
 --
-CREATE DATABASE if not exists gpm;
-use gpm;
+use art;
 -- --------------------------------------------------------
 
 --
--- Structure de la table `entreprise`
+-- Structure de la table `oeuvre`
 --
 
-DROP TABLE IF EXISTS `entreprise`;
-CREATE TABLE IF NOT EXISTS `entreprise` (
+DROP TABLE IF EXISTS `oeuvre`;
+CREATE TABLE IF NOT EXISTS `oeuvre` (
   `id` int(10) NOT NULL auto_increment,
-  `tel` varchar(10) DEFAULT NULL,
-  `siren` varchar(24) DEFAULT NULL,
-  `mail` varchar(24) DEFAULT NULL,
-  `raisonSociale` varchar(24) DEFAULT NULL,
-  `mdp` varchar(24) DEFAULT NULL,
+  `titre` varchar(10) DEFAULT NULL,
+  `date` int(24) DEFAULT NULL,
+  `userId` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Déchargement des données de la table `entreprise`
+-- Déchargement des données de la table `oeuvre`
 --
 
-INSERT INTO `entreprise` (`tel`, `siren`, `mail`, `raisonSociale`, `mdp`) VALUES
-('023456789', '123456789', 'arezki@gmail.com', NULL, '0000'),
-('213123332', '342342323', 'are@gmail.com', NULL, '1111');
-
--- --------------------------------------------------------
-
---
--- Structure de la table `etudiant`
---
-
-DROP TABLE IF EXISTS `etudiant`;
-CREATE TABLE IF NOT EXISTS `etudiant` (
-  `id` int(10) NOT NULL auto_increment,
-  `numetu` varchar(24) NOT NULL,
-  `idProjet` int(10) DEFAULT NULL,
-  `annee` int(10) DEFAULT NULL,
-  `nom` varchar(24) DEFAULT NULL,
-  `prenom` varchar(24) DEFAULT NULL,
-  `mail` varchar(24) DEFAULT NULL,
-  `mdp` varchar(24) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Déchargement des données de la table `etudiant`
---
-
-INSERT INTO `etudiant` (`numetu`, `idProjet`, `annee`, `nom`, `prenom`, `mail`, `mdp`) VALUES
-('2154376', 1, NULL, NULL, NULL,'bbb@gmail.com', '3333'),
-('2255333', 2, NULL, NULL, NULL,'aaa@gmail.com', '4444');
-
--- --------------------------------------------------------
-
---
--- Structure de la table `prof`
---
-
-DROP TABLE IF EXISTS `prof`;
-CREATE TABLE IF NOT EXISTS `prof` (
-  `id` int(10) NOT NULL auto_increment,
-  `mail` varchar(24) DEFAULT NULL,
-  `mdp` varchar(24) DEFAULT NULL,
-  `nom` varchar(24) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Déchargement des données de la table `prof`
---
-
-INSERT INTO `prof` (`mail`, `mdp`, `nom`) VALUES
-(NULL, NULL, NULL),
-(NULL, NULL, NULL);
-
--- --------------------------------------------------------
-
---
--- Structure de la table `tuteur`
---
-
-DROP TABLE IF EXISTS `tuteur`;
-CREATE TABLE IF NOT EXISTS `tuteur` (
-  `id` int(10) NOT NULL auto_increment,
-  `tel` varchar(10) DEFAULT NULL,
-  `entreprise` int(10) NOT NULL,
-  `nom` varchar(24) DEFAULT NULL,
-  `mail` varchar(24) DEFAULT NULL,
-  `mdp` varchar(24) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `Entreprise` (`entreprise`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Déchargement des données de la table `tuteur`
---
-
-INSERT INTO `tuteur` (`tel`, `entreprise`, `nom`, `mail`, `mdp`) VALUES
-('45353443', 1, NULL, NULL, NULL),
-('34534543', 2, NULL, NULL, NULL);
-COMMIT;
+INSERT INTO `oeuvre` (`titre`) VALUES ('Fleur étincelante');
+INSERT INTO `oeuvre` (`titre`) VALUES ('Un couteau qui ne coupe pas');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+DROP TABLE IF EXISTS `test`;
+CREATE TABLE IF NOT EXISTS `test` (
+  `id` int(10) NOT NULL auto_increment,
+  `titre` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+COMMIT;

@@ -23,8 +23,13 @@ public class ArtServiceImpl implements ArtService{
     }
 
     @Override
-    public Optional<Oeuvre> getOeuvreById(Long id) {
-        return oeuvreRepository.findById(id);
+    public Optional<Oeuvre> getOeuvreById(Long id) throws OeuvreNotFoundException {
+        if (oeuvreRepository.existsById(id)){
+            return oeuvreRepository.findById(id);
+        }
+        else{
+            throw new OeuvreNotFoundException();
+        }
     }
 
     @Override
@@ -34,19 +39,27 @@ public class ArtServiceImpl implements ArtService{
 
     @Override
     public void suppressionOeuvre(Long id) throws OeuvreNotFoundException {
-        Optional<Oeuvre> oeuvre = oeuvreRepository.findById(id);
-        if (Objects.isNull(oeuvre)){
+        if (oeuvreRepository.existsById(id)){
+            oeuvreRepository.deleteById(id);
+        }
+        else{
             throw new OeuvreNotFoundException();
         }
-        oeuvreRepository.deleteById(id);
     }
+
+    //Methode ajout catégorie : to do
 
     /*
     @Override
-    public void modifierOeuvreTitre(String title) {
-        //to do
-    }
-        @Override
+    public void modifierOeuvreTitre(Oeuvre oeuvre) throws OeuvreNotFoundException {
+        //Optional<Oeuvre> oeuvre = oeuvreRepository.findById(id);
+        Optional<Oeuvre> oeuvre1 = getOeuvreById(oeuvre.getId());
+        if (oeuvre1 != null) {
+        }
+    }*/
+    /*
+
+    @Override
     public Collection<Oeuvre> getAllOeuvreByCategorie(Categorie categorie) {
         return oeuvreRepository.findAllByCategorie(categorie);
     }
@@ -55,12 +68,5 @@ public class ArtServiceImpl implements ArtService{
     public Collection<Oeuvre> getAllOeuvreByTitre(String titre) {
         return oeuvreRepository.findAllByTitre(titre);
     }
-    @Override
-    public boolean oeuvreExiste(Long id) {
-        return oeuvreRepository.existsById(id);
-    }
     */
-
-
-
-}
+    }

@@ -15,6 +15,7 @@ public class Oeuvre {
     private String titre;
     private LocalDateTime date;
     //private Categorie categorie;
+    //to do Elodie: récupérer le userId et créer un attribut auteur récupérant le nom de l'auteur via son id
     private Long userId;
 
 

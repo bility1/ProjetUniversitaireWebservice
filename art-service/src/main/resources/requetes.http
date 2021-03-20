@@ -1,3 +1,32 @@
 GET http://localhost:8080/api/art/oeuvres
 
+####
+
+GET http://localhost:8080/api/art/oeuvres/2
+
+####
+
+GET http://localhost:8080/api/art/oeuvres/25
+
+####
+
+POST http://localhost:8080/api/art/oeuvres
+Content-Type: application/json
+Accept: application/json
+
+{"titre": "ca marche !"}
+
 ###
+
+DELETE http://localhost:8080/api/art/oeuvres/1
+
+###
+
+DELETE http://localhost:8080/api/art/oeuvres/25
+
+###
+
+GET http://localhost:8080/api/review/avis
+
+###
+
