@@ -18,6 +18,11 @@ public class Oeuvre {
     public Oeuvre (String titre){
         this.titre=titre;
     }
+
+    public Oeuvre() {
+
+    }
+
     public Categorie getCategorie() {
         return categorie;
     }

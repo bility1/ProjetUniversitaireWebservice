@@ -4,6 +4,7 @@ import fr.artapp.artservice.Exception.ExceptionDejaException;
 import fr.artapp.artservice.Exception.OeuvreNotFoundException;
 import fr.artapp.artservice.model.Categorie;
 import fr.artapp.artservice.model.Oeuvre;
+import fr.artapp.artservice.repository.CategorieRepositery;
 import fr.artapp.artservice.repository.OeuvreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,10 @@ public class ArtServiceImpl implements ArtService{
 
     @Autowired
     OeuvreRepository oeuvreRepository;
+
+    @Autowired
+    CategorieRepositery categorieRepositery;
+
 
     private Collection<Oeuvre> lesOeuvres = new ArrayList<>();
     @Override
@@ -36,19 +41,7 @@ public class ArtServiceImpl implements ArtService{
     }
 
 
-    public Oeuvre creerOeuvre(String titre) throws ExceptionDejaException {
-        System.out.println("les oeuvres : " + lesOeuvres);
 
-        if (this.lesOeuvres.contains(titre)){
-            throw new ExceptionDejaException();
-        }else {
-            Oeuvre newOeuvre = new Oeuvre(titre);
-            lesOeuvres.add(newOeuvre);
-
-            oeuvreRepository.save(newOeuvre);
-            return newOeuvre;
-        }
-    }
 
     @Override
     public void suppressionOeuvre(Long id) throws OeuvreNotFoundException {
@@ -57,6 +50,10 @@ public class ArtServiceImpl implements ArtService{
             throw new OeuvreNotFoundException();
         }
         oeuvreRepository.deleteById(id);
+    }
+    @Override
+    public Categorie getCategorieByNomcategorie(String nomCategorie){
+        return categorieRepositery.findByNomCategorie(nomCategorie);
     }
 
     @Override

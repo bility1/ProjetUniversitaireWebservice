@@ -7,6 +7,7 @@ import fr.artapp.artservice.model.Oeuvre;
 import fr.artapp.artservice.service.ArtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,11 +32,7 @@ public class Controleur  {
         return artService.getAllOeuvres();
     }
 
-    @GetMapping(value = "/oeuvres/{id}")
-    public ResponseEntity<Oeuvre> getOeuvreById(@PathVariable Long id) {
-        Optional<Oeuvre> oeuvre = artService.getOeuvreById(id);
-        return ResponseEntity.ok(oeuvre.get());
-    }
+
 
     @DeleteMapping(value = "/oeuvres/{id}")
     public ResponseEntity<Long> suppressionOeuvre(@PathVariable("id") Long id, UriComponentsBuilder base) throws OeuvreNotFoundException {
@@ -51,53 +48,43 @@ public class Controleur  {
         return ResponseEntity.created(location).body(oeuvre);
     }
 
+    @GetMapping(value = "/oeuvres/okk/{id}")
+    public ResponseEntity<Oeuvre> getOeuvreById(@PathVariable Long id) {
+        Optional<Oeuvre> oeuvre = artService.getOeuvreById(id);
+        return ResponseEntity.ok(oeuvre.get());
+    }
 
-    @GetMapping(value = "/oeuvres/{categorie}", params = "category")
-    public ResponseEntity<Collection<Oeuvre>> getAllOeuvreByCategorie(@RequestParam ("category") Categorie categorie) {
+    @GetMapping(value = "/oeuvres/{nomCategorie}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Collection<Oeuvre>> getAllOeuvreByCategorie(@PathVariable String nomCategorie) {
+        Categorie categorie =artService.getCategorieByNomcategorie(nomCategorie);
         Collection<Oeuvre> oeuvre = artService.getAllOeuvreByCategorie(categorie);
+        if (categorie!=null && !oeuvre.isEmpty() ){
+
+            return ResponseEntity.ok(oeuvre);
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND ).build();
+        }
+
         // il reste à ajouter la configuration pour l'authentification
 
 
-        if (oeuvre!=null){
-            return ResponseEntity.ok(oeuvre);
-        }else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
     }
 
-    @GetMapping(value = "/oeuvres/{title}")
+    @GetMapping(value = "/oeuvres/titre/{titre}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Collection<Oeuvre>> getAllOeuvreBytitle(@PathVariable String titre) {
         Collection<Oeuvre> oeuvre = artService.getAllOeuvreByTitre(titre);
 
         // il reste à ajouter la configuration pour l'authentification
 
-        if(oeuvre!=null){
-            return ResponseEntity.ok(oeuvre);
+        if(!oeuvre.isEmpty()){
+            return ResponseEntity.ok().body(oeuvre);
         }else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
     }
 
-    @PostMapping(value = "/oeuvre")
-    public ResponseEntity<Oeuvre> creerOeuvre(Principal principal,@RequestBody String titre){
 
-        Oeuvre oeuvre= null;
-        try {
-            oeuvre = artService.creerOeuvre(titre);
-        }catch ( ExceptionDejaException e){
-            e.printStackTrace();
-        }
-       /* URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{id}")
-                .buildAndExpand(oeuvre.getId()).toUri();
-
-        return ResponseEntity.created(location).body(oeuvre);*/
-        // c'est pas la bonne requete
-        return ResponseEntity.status(HttpStatus.MULTI_STATUS).build();
-
-    }
 
 }
 

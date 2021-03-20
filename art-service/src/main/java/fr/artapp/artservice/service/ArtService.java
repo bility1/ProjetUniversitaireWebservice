@@ -24,7 +24,8 @@ public interface ArtService {
 
     Collection<Oeuvre> getAllOeuvreByTitre(String titre);
 
-    Oeuvre creerOeuvre(String titre) throws ExceptionDejaException;
+
+    Categorie getCategorieByNomcategorie(String nomCategorie);
 
 /*
     void modifierOeuvreTitre(String title);
