@@ -18,23 +18,15 @@ public interface ArtService {
 
     void suppressionOeuvre(Long id) throws OeuvreNotFoundException;
 
-    //void modifierOeuvreTitre(Long id, String title);
-
-
-    /*
-
-    Collection<Oeuvre> getAllOeuvreByCategorie(Categorie categorie);
 
     Collection<Oeuvre> getAllOeuvreByTitre(String titre);
 
-
     Categorie getCategorieByNomcategorie(String nomCategorie);
 
-    void modifierOeuvreTitre(String title);
-    boolean oeuvreExiste(Long id);
+    Collection<Oeuvre> getAllOeuvreByCategorie(Categorie categorie);
 
-    Oeuvre getOeuvreByUser(User user);
-    */
+    //void modifierOeuvreTitre(String title);
 
+    //Oeuvre getOeuvreByUser(User user);
 
 }

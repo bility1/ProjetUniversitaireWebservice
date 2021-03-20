@@ -1,4 +1,7 @@
-package fr.artapp.artservice.Exception;
+package fr.artapp.reviewservice.exceptions;
 
-public class OeuvreNotFoundException extends Throwable{
+public class ReviewNotFoundException extends Exception{
+    public ReviewNotFoundException(){
+        super("Review pas trouvé");
+    }
 }

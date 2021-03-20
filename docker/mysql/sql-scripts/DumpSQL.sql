@@ -31,7 +31,7 @@ use art;
 DROP TABLE IF EXISTS `oeuvre`;
 CREATE TABLE IF NOT EXISTS `oeuvre` (
   `id` int(10) NOT NULL auto_increment,
-  `titre` varchar(10) DEFAULT NULL,
+  `titre` varchar(50) DEFAULT NULL,
   `date` int(24) DEFAULT NULL,
   `userId` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`)

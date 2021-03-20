@@ -1,17 +1,5 @@
 version: "3"
 services:
-  dc-mysql-auth:
-    container_name: dc-mysql-auth
-    build: mysql/
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=auth
-    ports:
-      - "3308:3306"
-    networks:
-      - emp
-    restart: always
-
   dc-mysql-art:
     container_name: dc-mysql-art
     build: mysql/
@@ -54,17 +42,6 @@ services:
     depends_on:
       - discovery
       - dc-mysql-art
-
-  auth-service:
-    image: art-microservices/auth-service
-    environment:
-      - JAVA_TOOL_OPTIONS=
-        -DCONSUL_HOST=discovery
-    networks:
-      - emp
-    depends_on:
-      - discovery
-      - dc-mysql-auth
 
   review-service:
     image: art-microservices/review-service
