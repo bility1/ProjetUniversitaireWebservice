@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.Optional;
+
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
@@ -19,7 +19,6 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Collection<Review> getAllReview() {
         return (Collection<Review>)  reviewRepository.findAll();
-
     }
 
     @Override
@@ -29,12 +28,6 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public void suppressionReview(String id) throws ReviewNotFoundException {
-        /*Optional<Review> review =  this.reviewRepository.findByIdAvis(String.valueOf(id));
-        if (review.isEmpty()){
-            throw new ReviewNotFoundException();
-        }else{
-
-        }*/
         if (reviewRepository.existsByIdAvis(id)){
             reviewRepository.deleteByIdAvis(id);
         }
@@ -42,4 +35,5 @@ public class ReviewServiceImpl implements ReviewService {
             throw new ReviewNotFoundException();
         }
     }
+
 }

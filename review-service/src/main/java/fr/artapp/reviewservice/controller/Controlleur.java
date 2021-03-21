@@ -47,11 +47,8 @@ public class Controlleur {
 
     @PostMapping(value = "/avis")
     public ResponseEntity<Review> create(@RequestBody Review reviewBody, UriComponentsBuilder base) {
-        int id = reviews.size();
-        reviewBody.setIdAvis(String.valueOf(id));
-        reviews.add(reviewBody);
         reviewService.setReview(reviewBody);
-        URI location = base.path("/api/avis/{id}").buildAndExpand(id).toUri();
+        URI location = base.path("/api/avis/{id}").buildAndExpand(reviewBody).toUri();
         // notification d'un nouveau avis dans le Stream
         notifications.onNext(reviewBody);
 
