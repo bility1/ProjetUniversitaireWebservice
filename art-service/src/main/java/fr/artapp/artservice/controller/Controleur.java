@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.BufferingClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -26,14 +28,21 @@ public class Controleur  {
 
 
     //cases of use  : calling an other backend service to get or post data
-    @Autowired
-    RestTemplate keycloakRestTemplate;
+
+    RestTemplate keycloakRestTemplate  = new RestTemplate(
+            new BufferingClientHttpRequestFactory(
+                    new SimpleClientHttpRequestFactory()
+            )
+    );
 
 
     @GetMapping(value = "/hello")
     @ResponseStatus(HttpStatus.OK)
     public Mono<String> hello(){
-        return Mono.just("hello !");
+        String uri ="http://localhost:8089/api/review/hello";
+        String result = keycloakRestTemplate.getForObject(uri, String.class);
+
+        return Mono.just("hello artservice ! "+result);
     }
 
     @GetMapping(value = "/oeuvres")

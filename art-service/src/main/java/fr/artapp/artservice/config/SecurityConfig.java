@@ -9,6 +9,7 @@ import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurer
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,10 +18,13 @@ import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.annotation.RequestScope;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Configuration
@@ -65,19 +69,23 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         //récupérer l'en-tête d'authentification de la demande entrante
         final String authHeader =
                 inReq.getHeader(HttpHeaders.AUTHORIZATION);
-        final RestTemplate restTemplate = new RestTemplate();
+        System.out.println("TOKEN ++++++++++++"+authHeader);
+        RestTemplate restTemplate = new RestTemplate();
         //
         //ajouter un token seulement si un en-tête d'authentification entrant existe
         if (authHeader != null && !authHeader.isEmpty()) {
             // puisque l'en-tête doit être ajouté à chaque requête sortante,
             // ajoute un intercepteur qui gère cela.
-            restTemplate.getInterceptors().add(
-                    (outReq, bytes, clientHttpReqExec) -> {
-                        outReq.getHeaders().set(
-                                HttpHeaders.AUTHORIZATION, authHeader
-                        );
-                        return clientHttpReqExec.execute(outReq, bytes);
-                    });
+            List<ClientHttpRequestInterceptor> interceptors
+                    = restTemplate.getInterceptors();
+            if (CollectionUtils.isEmpty(interceptors)) {
+                interceptors = new ArrayList<>();
+            }
+
+           interceptors.add(new RestTemplateHeaderModifierInterceptor(authHeader)  );
+            restTemplate.setInterceptors(interceptors);
+
+
         }
         return restTemplate;
     }
