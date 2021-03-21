@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
@@ -22,6 +23,11 @@ public class Controleur  {
 
     @Autowired
     ArtService artService;
+
+
+    //cases of use  : calling an other backend service to get or post data
+    @Autowired
+    RestTemplate keycloakRestTemplate;
 
 
     @GetMapping(value = "/hello")

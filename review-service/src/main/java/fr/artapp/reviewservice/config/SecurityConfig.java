@@ -1,6 +1,7 @@
 package fr.artapp.reviewservice.config;
 
 
+import org.apache.http.HttpHeaders;
 import org.keycloak.adapters.KeycloakConfigResolver;
 import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
 import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
@@ -16,6 +17,10 @@ import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.annotation.RequestScope;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Configuration
 @EnableWebSecurity
@@ -52,7 +57,30 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     }
 
 
+/* webflux donc webclient ?
+    @Bean
+    @RequestScope
+    public Httpc keycloakRestTemplate(HttpServletRequest inReq) {
+        //récupérer l'en-tête d'authentification de la demande entrante
+        final String authHeader =
+                inReq.getHeader(HttpHeaders.AUTHORIZATION);
+        final RestTemplate restTemplate = new RestTemplate();
+        //
+        //ajouter un token seulement si un en-tête d'authentification entrant existe
+        if (authHeader != null && !authHeader.isEmpty()) {
+            // puisque l'en-tête doit être ajouté à chaque requête sortante,
+            // ajoute un intercepteur qui gère cela.
+            restTemplate.getInterceptors().add(
+                    (outReq, bytes, clientHttpReqExec) -> {
+                        outReq.getHeaders().set(
+                                HttpHeaders.AUTHORIZATION, authHeader
+                        );
+                        return clientHttpReqExec.execute(outReq, bytes);
+                    });
+        }
+        return restTemplate;
+    }
 
-
+ */
 
 }
