@@ -1,5 +1,6 @@
 package fr.artapp.reviewservice.controller;
 
+import fr.artapp.reviewservice.exceptions.ReviewNotFoundException;
 import fr.artapp.reviewservice.model.Review;
 import fr.artapp.reviewservice.repository.ReviewRepository;
 import fr.artapp.reviewservice.service.ReviewService;
@@ -63,7 +64,16 @@ public class Controlleur {
         return reviewService.getAllReview();
     }
 
-
+    @DeleteMapping(value = "/avis/{id}")
+    public ResponseEntity<String> suppressionAvis(@PathVariable("id") String id, UriComponentsBuilder base) {
+        try {
+            reviewService.suppressionReview(id);
+        } catch (ReviewNotFoundException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.toString());
+        }
+        return ResponseEntity.ok().body("Suppression effectuée : "+id);
+    }
 
 
 }
