@@ -63,11 +63,20 @@ public class Controleur  {
     }
 
     //to do Elodie: ajouter une exception
-    @PostMapping(value = "/oeuvres")
-    public ResponseEntity<Oeuvre> ajoutOeuvre(@RequestBody Oeuvre oeuvre, UriComponentsBuilder base) {
-        artService.ajoutOeuvre(oeuvre);
+    @PostMapping(value = "/oeuvres/{idCategorie}")
+    public ResponseEntity<Oeuvre> ajoutOeuvre(@RequestBody Oeuvre oeuvre,@PathVariable Long idCategorie, UriComponentsBuilder base) {
+
+        artService.ajoutOeuvre(oeuvre,idCategorie);
+
         URI location = base.path("/art/oeuvres/{id}").buildAndExpand(oeuvre).toUri();
         return ResponseEntity.created(location).body(oeuvre);
+    }
+    @PostMapping(value = "/oeuvres/categorie")
+    public ResponseEntity<Categorie> ajoutCategorie(@RequestBody Categorie categorie,UriComponentsBuilder base)  {
+        artService.ajoutCategorie(categorie);
+
+        URI location =base.path("/art/oeuvres/{id}").buildAndExpand(categorie).toUri();
+        return ResponseEntity.created(location).body(categorie);
     }
 
     @GetMapping(value = "/oeuvres/{id}")

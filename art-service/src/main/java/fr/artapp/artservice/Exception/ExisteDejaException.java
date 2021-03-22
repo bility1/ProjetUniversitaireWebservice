@@ -1,4 +1,4 @@
 package fr.artapp.artservice.Exception;
 
-public class ExisteDejaException extends Throwable {
+public class ExisteDejaException extends Exception {
 }

@@ -27,27 +27,47 @@ Content-Type: application/json
 ###
 GET http://localhost:8089/api/art/oeuvres
 
+###
+POST http://localhost:8089/api/art/oeuvres/categorie
+Content-Type: application/json
+
+{
+ "nomCategorie": "yes"
+}
 ####
-GET http://localhost:8089/api/art/oeuvres/2
+GET http://localhost:8089/api/art/oeuvres/categorie/yes
 
 ####
 GET http://localhost:8089/api/art/oeuvres/25
 
 ####
-POST http://localhost:8089/api/art/oeuvres
-Content-Type: application/json
-Accept: application/json
-
-{"titre": "ca marche !"}
-
-###
-
-POST http://localhost:8089/api/art/oeuvres
+POST http://localhost:8089/api/art/oeuvres/1
 Content-Type: application/json
 Accept: application/json
 
 {
-  "titre": "yes"
+  "titre": "ca marche !"
+
+}
+
+###
+POST http://localhost:8089/api/art/oeuvres/categorie
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomCategorie": "fiction"
+}
+
+###
+
+
+POST http://localhost:8089/api/art/oeuvres/categorie
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomCategorie": "horreur"
 }
 
 ###

@@ -14,7 +14,8 @@ public interface ArtService {
 
     Optional<Oeuvre> getOeuvreById(Long id) throws OeuvreNotFoundException;
 
-    Oeuvre ajoutOeuvre(Oeuvre oeuvre);
+    Oeuvre ajoutOeuvre(Oeuvre oeuvre,Long id);
+    Categorie ajoutCategorie(Categorie categorie);
 
     void suppressionOeuvre(Long id) throws OeuvreNotFoundException;
 

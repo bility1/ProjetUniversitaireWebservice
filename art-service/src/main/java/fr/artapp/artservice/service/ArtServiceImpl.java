@@ -46,10 +46,16 @@ public class ArtServiceImpl implements ArtService{
     }
 
     @Override
-    public Oeuvre ajoutOeuvre(Oeuvre oeuvre) {
+    public Oeuvre ajoutOeuvre(Oeuvre oeuvre,Long id) {
+        Optional<Categorie> categorie =categorieRepositery.findById(id);
+        oeuvre.setCategorie(categorie.get());
         return oeuvreRepository.save(oeuvre);
     }
 
+    @Override
+    public Categorie ajoutCategorie(Categorie categorie) {
+        return categorieRepositery.save(categorie);
+    }
 
     @Override
     public Collection<Oeuvre> getAllOeuvreByCategorie(Categorie categorie) {
