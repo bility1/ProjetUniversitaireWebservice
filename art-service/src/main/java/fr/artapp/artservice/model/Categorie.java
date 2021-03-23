@@ -1,5 +1,8 @@
 package fr.artapp.artservice.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -10,6 +13,7 @@ public class Categorie {
     private Long id;
     private String nomCategorie;
     private String description;
+    @JsonManagedReference
     @OneToMany(mappedBy = "categorie")
     private Set<Oeuvre> oeuvre;
 

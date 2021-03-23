@@ -25,7 +25,7 @@ Content-Type: application/json
 { "userName": "steph", "password": "steph","emailAddress": "steph@gmail.com","firstName": "steph","lastName": "steph"}
 
 ###
-GET http://localhost:8089/api/art/oeuvres
+GET http://localhost:8089/api/art/oeuvres/
 
 ###
 POST http://localhost:8089/api/art/oeuvres/categorie
@@ -41,7 +41,7 @@ GET http://localhost:8089/api/art/oeuvres/categorie/yes
 GET http://localhost:8089/api/art/oeuvres/25
 
 ####
-POST http://localhost:8089/api/art/oeuvres/1
+POST http://localhost:8089/api/art/oeuvres/2
 Content-Type: application/json
 Accept: application/json
 
