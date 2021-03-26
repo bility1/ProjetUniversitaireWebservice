@@ -1,5 +1,7 @@
 package fr.artapp.artservice.service;
 
+import fr.artapp.artservice.Exception.CategorieExistePasException;
+import fr.artapp.artservice.Exception.OeuvreExisteDejaException;
 import fr.artapp.artservice.Exception.OeuvreNotFoundException;
 import fr.artapp.artservice.model.Categorie;
 import fr.artapp.artservice.model.Oeuvre;
@@ -21,8 +23,12 @@ public class ArtServiceImpl implements ArtService{
     CategorieRepositery categorieRepositery;
 
     @Override
-    public Collection<Oeuvre> getAllOeuvres() {
-        return (Collection<Oeuvre>)  oeuvreRepository.findAll();
+    public Collection<Oeuvre> getAllOeuvres() throws OeuvreNotFoundException{
+        Collection<Oeuvre> oeuvre = (Collection<Oeuvre>) oeuvreRepository.findAll();
+        if (oeuvre.isEmpty()){
+            throw new OeuvreNotFoundException();
+        }
+        return oeuvre;
     }
 
     @Override
@@ -46,37 +52,34 @@ public class ArtServiceImpl implements ArtService{
     }
 
     @Override
-    public Oeuvre ajoutOeuvre(Oeuvre oeuvre,Long id) {
-        Optional<Categorie> categorie =categorieRepositery.findById(id);
+    public Oeuvre ajoutOeuvre(Oeuvre oeuvre,Long idCategorie) throws CategorieExistePasException {
+        if (!categorieRepositery.existsById(idCategorie)) {
+            throw new CategorieExistePasException();
+        }
+        Optional<Categorie> categorie = categorieRepositery.findById(idCategorie);
         oeuvre.setCategorie(categorie.get());
         return oeuvreRepository.save(oeuvre);
     }
 
     @Override
-    public Categorie ajoutCategorie(Categorie categorie) {
-        return categorieRepositery.save(categorie);
+    public Collection<Oeuvre> getAllOeuvreByTitre(String titre) throws OeuvreNotFoundException{
+        Collection<Oeuvre> oeuvre = oeuvreRepository.findAllByTitre(titre);
+        if (oeuvre.isEmpty()){
+            throw new OeuvreNotFoundException();
+        }
+        return oeuvre;
     }
-
-    @Override
-    public Collection<Oeuvre> getAllOeuvreByCategorie(Categorie categorie) {
-        return oeuvreRepository.findAllByCategorie(categorie);
-    }
-
-    @Override
-    public Collection<Oeuvre> getAllOeuvreByTitre(String titre) {
-        return oeuvreRepository.findAllByTitre(titre);
-    }
-
-    @Override
-    public Categorie getCategorieByNomcategorie(String nomCategorie){
-        return categorieRepositery.findByNomCategorie(nomCategorie);
-    }
-
 
     /*
     @Override
     public void modifierOeuvreTitre(String title) {
         //to do
-    }*/
-    //Methode ajout catégorie : to do
+    }
+        @Override
+    public void oeuvreByUser(String title) {
+        //to do
+    }
+
+    */
+
 }

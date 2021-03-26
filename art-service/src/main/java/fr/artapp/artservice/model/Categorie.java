@@ -1,6 +1,7 @@
 package fr.artapp.artservice.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -12,10 +13,10 @@ public class Categorie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nomCategorie;
-    private String description;
     @JsonManagedReference
-    @OneToMany(mappedBy = "categorie")
+    @ManyToMany(mappedBy = "categorie")
     private Set<Oeuvre> oeuvre;
+    private String description;
 
     public Set<Oeuvre> getOeuvre() {
         return oeuvre;
