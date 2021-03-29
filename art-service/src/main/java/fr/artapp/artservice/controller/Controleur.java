@@ -19,6 +19,7 @@ import reactor.core.publisher.Mono;
 import java.net.URI;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 public class Controleur  {
@@ -64,7 +65,7 @@ public class Controleur  {
 
     //to do Elodie: ajouter une exception
     @PostMapping(value = "/oeuvres/{idCategorie}")
-    public ResponseEntity<Oeuvre> ajoutOeuvre(@RequestBody Oeuvre oeuvre,@PathVariable Long idCategorie, UriComponentsBuilder base) {
+    public ResponseEntity<Oeuvre> ajoutOeuvre(@RequestBody Oeuvre oeuvre,@PathVariable  Long idCategorie, UriComponentsBuilder base) {
 
         artService.ajoutOeuvre(oeuvre,idCategorie);
 
@@ -114,6 +115,11 @@ public class Controleur  {
         }
     }
 
+    @PutMapping(value = "/oeuvres/modifier/{id}/{categorie}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Categorie> modifierCategorie(@PathVariable Long id,@PathVariable String categorie) throws OeuvreNotFoundException {
+       Categorie categorie1 = artService.modifierCategorie(id,categorie);
+        return ResponseEntity.ok().body(categorie1);
+    }
 
 
 }

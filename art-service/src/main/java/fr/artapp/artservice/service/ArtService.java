@@ -7,6 +7,7 @@ import fr.artapp.artservice.model.Oeuvre;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface ArtService {
 
@@ -25,6 +26,7 @@ public interface ArtService {
     Categorie getCategorieByNomcategorie(String nomCategorie);
 
     Collection<Oeuvre> getAllOeuvreByCategorie(Categorie categorie);
+    Categorie modifierCategorie(Long id, String categorie) throws OeuvreNotFoundException;
 
     //void modifierOeuvreTitre(String title);
 

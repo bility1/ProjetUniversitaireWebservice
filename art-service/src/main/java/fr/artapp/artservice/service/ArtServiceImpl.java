@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ArtServiceImpl implements ArtService{
@@ -59,6 +60,7 @@ public class ArtServiceImpl implements ArtService{
 
     @Override
     public Collection<Oeuvre> getAllOeuvreByCategorie(Categorie categorie) {
+
         return oeuvreRepository.findAllByCategorie(categorie);
     }
 
@@ -72,6 +74,18 @@ public class ArtServiceImpl implements ArtService{
         return categorieRepositery.findByNomCategorie(nomCategorie);
     }
 
+    @Override
+    public Categorie modifierCategorie(Long id,String categorie) throws OeuvreNotFoundException {
+        if(categorieRepositery.findById(id).isPresent()){
+            Categorie categorie1 = categorieRepositery.findById(id).get();
+            categorie1.setNomCategorie(categorie);
+            Categorie updatecategorie =categorieRepositery.save(categorie1);
+
+            return updatecategorie;
+        }else {
+            throw new OeuvreNotFoundException();
+        }
+    }
 
     /*
     @Override

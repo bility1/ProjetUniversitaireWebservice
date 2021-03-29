@@ -35,7 +35,8 @@ Content-Type: application/json
  "nomCategorie": "yes"
 }
 ####
-GET http://localhost:8089/api/art/oeuvres/categorie/yes
+GET http://localhost:8089/api/art/oeuvres/categorie/1
+
 
 ####
 GET http://localhost:8089/api/art/oeuvres/25
@@ -46,7 +47,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "titre": "ca marche !"
+  "titre": "Orleans dans le 45"
 
 }
 
@@ -71,16 +72,23 @@ Accept: application/json
 }
 
 ###
-DELETE http://localhost:8089/api/art/oeuvres/1
+PUT http://localhost:8089/api/art/oeuvres/modifier/1/fiction
+Content-Type: application/json
+Accept: application/json
+
+
+
+###
+DELETE http://localhost:8089/api/art/oeuvres/3
 
 ###
 DELETE http://localhost:8089/api/art/oeuvres/25
 
 ###
-GET http://localhost:8089/api/art/oeuvres/titre/yes
+GET http://localhost:8089/api/art/oeuvres/titre/saw
 
 ###
-GET http://localhost:8089/api/art/oeuvres/categorie/horreur
+GET http://localhost:8089/api/art/oeuvres/categorie/fiction
 
 ###
 
