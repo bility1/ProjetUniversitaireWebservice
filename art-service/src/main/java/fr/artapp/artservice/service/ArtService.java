@@ -21,9 +21,7 @@ public interface ArtService {
 
     void suppressionOeuvre(Long id) throws OeuvreNotFoundException;
 
-
-
-    //void modifierOeuvreTitre(String title);
+    Oeuvre modifierOeuvreTitre(String titre, Long idOeuvre) throws OeuvreNotFoundException;
 
     //Oeuvre getOeuvreByUser(User user);
 

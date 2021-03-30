@@ -98,6 +98,17 @@ public class OeuvreControleur {
         }
     }
 
+    @PutMapping(value = "/oeuvres/{idOeuvre}/titre/{titre}")
+    public ResponseEntity<?> modifierOeuvre(@PathVariable(value = "idOeuvre") Long idOeuvre,
+                                            @PathVariable(value = "titre") String titre) {
+        try {
+            artService.modifierOeuvreTitre(titre, idOeuvre);
+            return ResponseEntity.ok().body(getOeuvreById(idOeuvre));
+        } catch (OeuvreNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.toString());
+        }
+    }
+
 
 
 

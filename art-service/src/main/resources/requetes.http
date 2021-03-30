@@ -30,12 +30,12 @@ GET http://localhost:8089/api/art/oeuvres/
 GET http://localhost:8089/api/art/oeuvres/25
 
 ####
-POST http://localhost:8089/api/art/oeuvres/2
+POST http://localhost:8089/api/art/oeuvres/1
 Content-Type: application/json
 Accept: application/json
 
 {
-  "titre": "pourquoi"
+  "titre": "vie"
 }
 
 ###
@@ -44,7 +44,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "nomCategorie": "veux"
+  "nomCategorie": "choix"
 }
 
 ###
@@ -57,10 +57,14 @@ DELETE http://localhost:8089/api/art/oeuvres/25
 GET http://localhost:8089/api/art/oeuvres/titre/pourquoi
 
 ###
-GET http://localhost:8089/api/art/oeuvres/categorie/ffff
+GET http://localhost:8089/api/art/oeuvres/categorie/choix
 
 ###
 
 GET http://localhost:8089/api/art/oeuvres/categorie/
+
+###
+
+PUT http://localhost:8089/api/art/oeuvres/1/titre/bébé non
 
 ###

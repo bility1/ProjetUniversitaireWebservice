@@ -70,11 +70,17 @@ public class ArtServiceImpl implements ArtService{
         return oeuvre;
     }
 
-    /*
     @Override
-    public void modifierOeuvreTitre(String title) {
-        //to do
+    public Oeuvre modifierOeuvreTitre(String titre, Long idOeuvre) throws OeuvreNotFoundException{
+        if (!oeuvreRepository.existsById(idOeuvre)) {
+            throw new OeuvreNotFoundException();
+        }
+        Oeuvre oeuvre = oeuvreRepository.findById(idOeuvre).orElse(new Oeuvre());
+        oeuvre.setTitre(titre);
+        return oeuvreRepository.save(oeuvre);
     }
+
+/*
         @Override
     public void oeuvreByUser(String title) {
         //to do
