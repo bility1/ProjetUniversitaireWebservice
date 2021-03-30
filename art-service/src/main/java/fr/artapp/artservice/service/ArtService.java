@@ -1,5 +1,6 @@
 package fr.artapp.artservice.service;
 
+import fr.artapp.artservice.Exception.CategorieNotFoundException;
 import fr.artapp.artservice.Exception.ExceptionDejaException;
 import fr.artapp.artservice.Exception.OeuvreNotFoundException;
 import fr.artapp.artservice.model.Categorie;
@@ -26,7 +27,6 @@ public interface ArtService {
     Categorie getCategorieByNomcategorie(String nomCategorie);
 
     Collection<Oeuvre> getAllOeuvreByCategorie(Categorie categorie);
-    Categorie modifierCategorie(Long id, String categorie) throws OeuvreNotFoundException;
 
     //void modifierOeuvreTitre(String title);
 

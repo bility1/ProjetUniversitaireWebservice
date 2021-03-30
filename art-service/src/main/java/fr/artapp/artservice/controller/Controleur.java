@@ -1,4 +1,5 @@
 package fr.artapp.artservice.controller;
+import fr.artapp.artservice.Exception.CategorieNotFoundException;
 import fr.artapp.artservice.Exception.ExceptionDejaException;
 import fr.artapp.artservice.Exception.ExisteDejaException;
 import fr.artapp.artservice.Exception.OeuvreNotFoundException;
@@ -19,7 +20,7 @@ import reactor.core.publisher.Mono;
 import java.net.URI;
 import java.util.Collection;
 import java.util.Optional;
-import java.util.UUID;
+
 
 @RestController
 public class Controleur  {
@@ -113,12 +114,6 @@ public class Controleur  {
         }else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-    }
-
-    @PutMapping(value = "/oeuvres/modifier/{id}/{categorie}",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Categorie> modifierCategorie(@PathVariable Long id,@PathVariable String categorie) throws OeuvreNotFoundException {
-       Categorie categorie1 = artService.modifierCategorie(id,categorie);
-        return ResponseEntity.ok().body(categorie1);
     }
 
 

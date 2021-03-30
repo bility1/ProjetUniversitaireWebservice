@@ -11,5 +11,5 @@ import java.util.UUID;
 public interface CategorieRepositery  extends CrudRepository<Categorie,Long> {
     Categorie findByNomCategorie(String nomCategorie);
 
-    Optional<Object> findById(UUID id);
+
 }

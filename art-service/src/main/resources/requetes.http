@@ -71,12 +71,6 @@ Accept: application/json
   "nomCategorie": "horreur"
 }
 
-###
-PUT http://localhost:8089/api/art/oeuvres/modifier/1/fiction
-Content-Type: application/json
-Accept: application/json
-
-
 
 ###
 DELETE http://localhost:8089/api/art/oeuvres/3
