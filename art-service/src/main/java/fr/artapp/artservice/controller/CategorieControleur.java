@@ -49,4 +49,24 @@ public class CategorieControleur {
         }
     }
 
+
+    @PutMapping(value = "/oeuvres/modifier/{id}/{categorie}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Categorie> modifierCategorie(@PathVariable Long id,@PathVariable String categorie) throws OeuvreNotFoundException {
+        Categorie categorie1 = categorieService.modifierCategorie(id,categorie);
+        return ResponseEntity.ok().body(categorie1);
+    }
+//delete categorie
+
+    @DeleteMapping(value = "/oeuvres/categorie/{id}")
+    public ResponseEntity<String> suppressionCategorie(@PathVariable("id") Long id)  {
+        try {
+            categorieService.suppressionCategorie(id);
+        }
+        catch(CategorieNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.toString());
+        }
+        return ResponseEntity.ok().build();
+    }
+
+
 }

@@ -48,4 +48,27 @@ public class CategorieServiceImpl implements CategorieService{
         }
         return oeuvre;
     }
+
+    @Override
+    public Categorie modifierCategorie(Long id,String categorie) throws OeuvreNotFoundException {
+        if(categorieRepositery.findById(id).isPresent()){
+            Categorie categorie1 = categorieRepositery.findById(id).get();
+            categorie1.setNomCategorie(categorie);
+            Categorie updatecategorie =categorieRepositery.save(categorie1);
+
+            return updatecategorie;
+        }else {
+            throw new OeuvreNotFoundException();
+        }
+    }
+
+    @Override
+    public void suppressionCategorie(Long id) throws CategorieNotFoundException {
+        if(categorieRepositery.existsById(id)){
+            categorieRepositery.deleteById(id);
+        }else{
+            throw new CategorieNotFoundException();
+        }
+    }
+
 }

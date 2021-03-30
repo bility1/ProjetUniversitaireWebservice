@@ -48,6 +48,8 @@ Accept: application/json
 }
 
 ###
+DELETE http://localhost:8089/api/art/oeuvres/categorie/1
+###
 DELETE http://localhost:8089/api/art/oeuvres/1
 
 ###

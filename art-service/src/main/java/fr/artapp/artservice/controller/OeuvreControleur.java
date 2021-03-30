@@ -1,5 +1,6 @@
 package fr.artapp.artservice.controller;
 import fr.artapp.artservice.Exception.CategorieExistePasException;
+import fr.artapp.artservice.Exception.CategorieNotFoundException;
 import fr.artapp.artservice.Exception.OeuvreExisteDejaException;
 import fr.artapp.artservice.Exception.OeuvreNotFoundException;
 import fr.artapp.artservice.model.Categorie;
@@ -108,7 +109,6 @@ public class OeuvreControleur {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.toString());
         }
     }
-
 
 
 

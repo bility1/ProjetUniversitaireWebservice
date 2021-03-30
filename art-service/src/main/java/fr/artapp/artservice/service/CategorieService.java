@@ -17,4 +17,7 @@ public interface CategorieService {
     Collection<Oeuvre> getAllOeuvreByCategorie(String nomCategorie) throws CategorieExistePasException, OeuvreNotFoundException;
 
 
+    Categorie modifierCategorie(Long id, String categorie) throws OeuvreNotFoundException;
+
+    void suppressionCategorie(Long id) throws CategorieNotFoundException;
 }
