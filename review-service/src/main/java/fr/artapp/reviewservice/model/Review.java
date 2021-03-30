@@ -16,18 +16,18 @@ public class Review {
     private String commentaire;
     @Field(value = "idOeuvre")
     private Long idOeuvre;
-    @Field(value = "idUtilisateur")
-    private Long idUtilisateur;
+    @Field(value = "loginUtilisateur")
+    private String loginUtilisateur;
 
     public Review() {
     }
 
-    public Review(String idAvis, Integer note, String commentaire, Long idOeuvre, Long idUtilisateur) {
+    public Review(String idAvis, Integer note, String commentaire, Long idOeuvre, String loginUtilisateur) {
         this.idAvis = idAvis;
         this.note = note;
         this.commentaire = commentaire;
         this.idOeuvre = idOeuvre;
-        this.idUtilisateur = idUtilisateur;
+        this.loginUtilisateur = loginUtilisateur;
     }
 
     public String getIdAvis() {
@@ -62,11 +62,11 @@ public class Review {
         this.idOeuvre = idOeuvre;
     }
 
-    public Long getIdUtilisateur() {
-        return idUtilisateur;
+    public String getLoginUtilisateur() {
+        return loginUtilisateur;
     }
 
-    public void setIdUtilisateur(Long idUtilisateur) {
-        this.idUtilisateur = idUtilisateur;
+    public void setLoginUtilisateur(String idUtilisateur) {
+        this.loginUtilisateur = loginUtilisateur;
     }
 }

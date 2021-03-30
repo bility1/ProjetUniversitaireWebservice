@@ -3,6 +3,7 @@ package fr.artapp.reviewservice.repository;
 import fr.artapp.reviewservice.model.Review;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,4 +18,8 @@ public interface ReviewRepository extends MongoRepository<Review, Long> { // Lon
     void deleteByIdAvis(String id);
 
     boolean existsByIdAvis(String id);
+
+
+
+    Collection<Review> findAllReviewByIdOeuvre(Long idOeuvre);
 }
