@@ -66,7 +66,7 @@ public class Review {
         return loginUtilisateur;
     }
 
-    public void setLoginUtilisateur(String idUtilisateur) {
+    public void setLoginUtilisateur(String loginUtilisateur) {
         this.loginUtilisateur = loginUtilisateur;
     }
 }

@@ -32,9 +32,11 @@ public class ReviewServiceImpl implements ReviewService {
     public void suppressionReview(String id,String login) throws ReviewNotFoundException,LoginNotCorrectException {
         Optional<Review> review = reviewRepository.findByIdAvis(id);
         if (reviewRepository.existsByIdAvis(id)){
-            reviewRepository.deleteByIdAvis(id);
-        }else if(login==review.get().getLoginUtilisateur()){
-            throw new LoginNotCorrectException();
+            if(!login.equals(review.get().getLoginUtilisateur())){
+                throw new LoginNotCorrectException();
+            }else{
+                reviewRepository.deleteByIdAvis(id);
+            }
         }
         else{
             throw new ReviewNotFoundException();
