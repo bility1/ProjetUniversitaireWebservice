@@ -30,21 +30,23 @@ public class Controleur  {
 
 
     //cases of use  : calling an other backend service to get or post data
-
+/*
     RestTemplate keycloakRestTemplate  = new RestTemplate(
             new BufferingClientHttpRequestFactory(
                     new SimpleClientHttpRequestFactory()
             )
     );
 
+ */
+
 
     @GetMapping(value = "/hello")
     @ResponseStatus(HttpStatus.OK)
     public Mono<String> hello(){
-        String uri ="http://localhost:8089/api/review/hello";
-        String result = keycloakRestTemplate.getForObject(uri, String.class);
+      //  String uri ="http://localhost:8089/api/review/hello";
+     //   String result = keycloakRestTemplate.getForObject(uri, String.class);
 
-        return Mono.just("hello artservice ! "+result);
+        return Mono.just("hello artservice ! ");
     }
 
     @GetMapping(value = "/oeuvres")

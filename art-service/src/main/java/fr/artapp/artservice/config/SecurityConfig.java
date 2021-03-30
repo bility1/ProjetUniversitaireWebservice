@@ -62,7 +62,7 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     }
 
 
-
+/*
     @Bean
     @RequestScope
     public RestTemplate keycloakRestTemplate(HttpServletRequest inReq) {
@@ -89,5 +89,7 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         }
         return restTemplate;
     }
+
+ */
 
 }

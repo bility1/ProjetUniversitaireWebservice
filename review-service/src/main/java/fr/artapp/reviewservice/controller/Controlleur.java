@@ -33,7 +33,7 @@ public class Controlleur {
     @GetMapping(value = "/hello")
     @ResponseStatus(HttpStatus.OK)
     public Mono<String> hello(){
-        return Mono.just("hello i m review service from the other side &&test&& !");
+        return Mono.just("hello i m review service  &&test&& !");
     }
 
 

@@ -1,3 +1,4 @@
+/*
 package fr.artapp.artservice.config;
 
 import org.springframework.http.HttpRequest;
@@ -23,3 +24,4 @@ public class RestTemplateHeaderModifierInterceptor implements ClientHttpRequestI
         }
     }
 
+*/
