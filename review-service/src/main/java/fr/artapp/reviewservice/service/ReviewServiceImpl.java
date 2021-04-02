@@ -1,9 +1,11 @@
 package fr.artapp.reviewservice.service;
 
 import fr.artapp.reviewservice.exceptions.LoginNotCorrectException;
+import fr.artapp.reviewservice.exceptions.NoteNotPossibleException;
 import fr.artapp.reviewservice.exceptions.ReviewNotFoundException;
 import fr.artapp.reviewservice.model.Review;
 import fr.artapp.reviewservice.repository.ReviewRepository;
+import org.keycloak.representations.AccessToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,13 +26,17 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public void setReview(Review review) {
+    public void setReview(Review review) throws NoteNotPossibleException {
+        if(review.getNote()>20||review.getNote()<0){
+            throw new NoteNotPossibleException();
+        }
         reviewRepository.save(review);
     }
 
     @Override
-    public void suppressionReview(String id,String login) throws ReviewNotFoundException,LoginNotCorrectException {
+    public void suppressionReview(String id, AccessToken token) throws ReviewNotFoundException,LoginNotCorrectException {
         Optional<Review> review = reviewRepository.findByIdAvis(id);
+        String login = token.getGivenName();
         if (reviewRepository.existsByIdAvis(id)){
             if(!login.equals(review.get().getLoginUtilisateur())){
                 throw new LoginNotCorrectException();
