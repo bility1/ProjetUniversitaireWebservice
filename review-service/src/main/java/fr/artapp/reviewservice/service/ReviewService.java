@@ -19,4 +19,6 @@ public interface ReviewService {
 
 
     Collection<Review> getAllReviewByIdOeuvre(Long idOeuvre);
+
+    Review modifierReview(String idAvis, Review review, String login) throws NoteNotPossibleException, LoginNotCorrectException, ReviewNotFoundException;
 }

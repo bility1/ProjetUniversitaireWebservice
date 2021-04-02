@@ -64,5 +64,28 @@ public class ReviewServiceImpl implements ReviewService {
        return reviewRepository.findAllReviewByIdOeuvre(idOeuvre);
     }
 
+    @Override
+    public Review modifierReview(String idAvis,Review review,  String login) throws LoginNotCorrectException, ReviewNotFoundException, NoteNotPossibleException {
+        Review reviewModif = reviewRepository.findByIdAvis(idAvis).get();
+        if(!reviewModif.getLoginUtilisateur().equals(login)){
+            throw new LoginNotCorrectException();
+        }
+        if(!reviewRepository.existsByIdAvis(idAvis)) {
+            throw new ReviewNotFoundException();
+        }
+        String commentaire = review.getCommentaire();
+        Integer note = review.getNote();
+        if(commentaire!=null){
+            reviewModif.setCommentaire(commentaire);
+        }
+        if(note!=null){
+            if(review.getNote()>20||review.getNote()<0){
+                throw new NoteNotPossibleException();
+            }
+            reviewModif.setNote(note);
+        }
+        return reviewRepository.save(reviewModif);
+    }
+
 
 }

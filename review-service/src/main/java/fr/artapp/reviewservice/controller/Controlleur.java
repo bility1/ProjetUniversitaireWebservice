@@ -118,5 +118,20 @@ public class Controlleur {
         return ResponseEntity.ok(reviewService.getAllReviewByIdOeuvre(idOeuvre));
     }
 
+    @PutMapping(value = "/avis/{idAvis}")
+    public ResponseEntity<?> modifierReview(@PathVariable(value = "idAvis") String idAvis,
+                                            @RequestBody Review review,
+                                            KeycloakAuthenticationToken principal) {
+        SimpleKeycloakAccount simpleKeycloakAccount = (SimpleKeycloakAccount) principal.getDetails();
+        AccessToken token  = simpleKeycloakAccount.getKeycloakSecurityContext().getToken();
+        String login=token.getGivenName();
+        try {
+            Review newReview = reviewService.modifierReview(idAvis,review, login);
+            return ResponseEntity.ok().body(newReview);
+        } catch (LoginNotCorrectException |ReviewNotFoundException|NoteNotPossibleException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.toString());
+        }
+    }
+
 
 }
