@@ -13,7 +13,8 @@ import java.util.Optional;
 public interface OeuvreRepository  extends CrudRepository<Oeuvre,Long> {
     Collection<Oeuvre> findAllByCategorie(Categorie categorie);
     Collection<Oeuvre> findAllByTitre(String title);
-
-
+    Collection<Oeuvre> findAllByUtilisateurId(String utilisateurId);
+    boolean existsByTitre(String titre);
+    boolean existsByUtilisateurId(String utilisateurId);
 }
 

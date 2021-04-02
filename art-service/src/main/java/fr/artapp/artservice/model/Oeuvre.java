@@ -3,6 +3,7 @@ package fr.artapp.artservice.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import fr.artapp.artservice.DTO.OeuvreDTO;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -19,15 +20,22 @@ public class Oeuvre {
     @JsonBackReference
     @ManyToOne
     private Categorie categorie;
-    private Long userId;
+    private String utilisateurId; //login utilisateur unique
+    //attribut image
 
-    public Oeuvre (String titre){
-        this.titre=titre;
+    public Oeuvre(String titre, LocalDateTime date, Categorie categorie, String utilisateurId) {
+        this.titre = titre;
+        this.date = date;
+        this.categorie = categorie;
+        this.utilisateurId = utilisateurId;
     }
 
     public Oeuvre() {
-
     }
+    /*
+    public Oeuvre (String titre){
+        this.titre=titre;
+    }*/
 
     public Categorie getCategorie() {
         return categorie;
@@ -46,8 +54,7 @@ public class Oeuvre {
     }
 
     public Long getId() {
-        return id;
-    }
+        return id; }
 
     public void setId(Long id) {
         this.id = id;
@@ -61,12 +68,12 @@ public class Oeuvre {
         this.date = date;
     }
 
-    public Long getUserId() {
-        return userId;
+    public String getUtilisateurId() {
+        return utilisateurId;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUtilisateurId(String utilisateurId) {
+        this.utilisateurId = utilisateurId;
     }
 }
 

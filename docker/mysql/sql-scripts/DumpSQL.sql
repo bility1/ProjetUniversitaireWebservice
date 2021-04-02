@@ -27,6 +27,7 @@ use art;
 --
 -- Structure de la table `oeuvre`
 --
+
 DROP TABLE IF EXISTS `categorie`;
 CREATE TABLE IF NOT EXISTS `categorie` (
   `id` int(10) NOT NULL auto_increment,
@@ -41,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `oeuvre` (
   `id` int(10) NOT NULL auto_increment,
   `titre` varchar(50) DEFAULT NULL,
   `date` int(24) DEFAULT NULL,
-  `userId` int(10) DEFAULT NULL,
+  `UtilisateurId` String(25) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 

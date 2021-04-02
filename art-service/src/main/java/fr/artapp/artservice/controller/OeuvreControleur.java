@@ -1,11 +1,12 @@
 package fr.artapp.artservice.controller;
-import fr.artapp.artservice.Exception.CategorieExistePasException;
-import fr.artapp.artservice.Exception.CategorieNotFoundException;
-import fr.artapp.artservice.Exception.OeuvreExisteDejaException;
-import fr.artapp.artservice.Exception.OeuvreNotFoundException;
-import fr.artapp.artservice.model.Categorie;
+import fr.artapp.artservice.DTO.OeuvreDTO;
+import fr.artapp.artservice.Exception.*;
 import fr.artapp.artservice.model.Oeuvre;
 import fr.artapp.artservice.service.ArtService;
+import org.keycloak.adapters.springsecurity.account.SimpleKeycloakAccount;
+import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.keycloak.representations.AccessToken;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,12 +15,11 @@ import org.springframework.http.client.BufferingClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
-import reactor.core.publisher.Mono;
 
-import java.net.URI;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 public class OeuvreControleur {
@@ -27,6 +27,8 @@ public class OeuvreControleur {
     @Autowired
     ArtService artService;
 
+    @Autowired
+    private ModelMapper mapper;
 
     //cases of use  : calling an other backend service to get or post data
     RestTemplate keycloakRestTemplate  = new RestTemplate(
@@ -35,32 +37,22 @@ public class OeuvreControleur {
             )
     );
 
-    @GetMapping(value = "/hello")
-    @ResponseStatus(HttpStatus.OK)
-    public Mono<String> hello(){
-        String uri ="http://localhost:8089/api/review/hello";
-        String result = keycloakRestTemplate.getForObject(uri, String.class);
-
-        return Mono.just("hello artservice ! "+result);
-    }
-
     @GetMapping(value = "/oeuvres")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> getAllOeuvres(){
-        try{
-            Collection<Oeuvre> oeuvre = artService.getAllOeuvres();
-            return ResponseEntity.ok().body(oeuvre);
-        }
-        catch(OeuvreNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.toString());
-        }
+        Collection<Oeuvre> oeuvres = artService.getAllOeuvres();
+        Collection<OeuvreDTO> oeuvresDTO= oeuvres.stream()
+                .map(oeuvre -> mapper.map(oeuvre,OeuvreDTO.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok().body(oeuvresDTO);
     }
 
     @GetMapping(value = "/oeuvres/{id}")
-    public ResponseEntity<?> getOeuvreById(@PathVariable Long id) {
+    public ResponseEntity<?> getOeuvreById( @PathVariable Long id) {
         try {
             Optional<Oeuvre> oeuvre = artService.getOeuvreById(id);
-            return ResponseEntity.ok(oeuvre.get());
+            OeuvreDTO oeuvreDTO = mapper.map(oeuvre.get(), OeuvreDTO.class);
+            return ResponseEntity.ok().body(oeuvreDTO);
         }
         catch(OeuvreNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.toString());
@@ -69,50 +61,78 @@ public class OeuvreControleur {
 
     @GetMapping(value = "/oeuvres/titre/{titre}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllOeuvreBytitle(@PathVariable String titre) {
-        try{
-            Collection<Oeuvre> oeuvre = artService.getAllOeuvreByTitre(titre);
-            return ResponseEntity.ok().body(oeuvre);
+        try {
+            Collection<Oeuvre> oeuvres = artService.getAllOeuvreByTitre(titre);
+            Collection<OeuvreDTO> oeuvresDTO= oeuvres.stream()
+                    .map(oeuvre -> mapper.map(oeuvre,OeuvreDTO.class))
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok().body(oeuvresDTO);
         }
-        catch(OeuvreNotFoundException e){
+        catch(TitreNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.toString());
+        }
+    }
+
+    @GetMapping(value = "/oeuvres/utilisateur/{idUtilisateur}")
+    public ResponseEntity<?> getAllOeuvresUtilisateursParId(@PathVariable(value = "idUtilisateur") String idUtilisateur) {
+        try{
+            Collection<Oeuvre> oeuvres = artService.getAllOeuvresByUtilisateur(idUtilisateur);
+            Collection<OeuvreDTO> oeuvresDTO= oeuvres.stream()
+                    .map(oeuvre -> mapper.map(oeuvre,OeuvreDTO.class))
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok().body(oeuvresDTO);
+        }
+            catch(UtilisateurNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.toString());
+        }
+    }
+
+    @PostMapping(value = "/oeuvres")
+    public ResponseEntity<?> ajoutOeuvre(@RequestBody OeuvreDTO oeuvredto, KeycloakAuthenticationToken principal) {
+        Oeuvre oeuvre = mapper.map(oeuvredto, Oeuvre.class);
+        SimpleKeycloakAccount simpleKeycloakAccount = (SimpleKeycloakAccount) principal.getDetails();
+        AccessToken token  = simpleKeycloakAccount.getKeycloakSecurityContext().getToken();
+        String login=token.getGivenName();
+        try {
+            artService.ajoutOeuvre(oeuvre, login);
+            OeuvreDTO oeuvreDTO = mapper.map(oeuvre, OeuvreDTO.class);
+            return new ResponseEntity<>(oeuvreDTO, HttpStatus.CREATED);
+        } catch (CategorieNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.toString());
         }
     }
 
     @DeleteMapping(value = "/oeuvres/{id}")
-    public ResponseEntity<String> suppressionOeuvre(@PathVariable("id") Long id) {
+    public ResponseEntity<String> suppressionOeuvre(@PathVariable("id") Long id,
+                                                    KeycloakAuthenticationToken principal) {
+        SimpleKeycloakAccount simpleKeycloakAccount = (SimpleKeycloakAccount) principal.getDetails();
+        AccessToken token  = simpleKeycloakAccount.getKeycloakSecurityContext().getToken();
+        String login=token.getGivenName();
         try {
-            artService.suppressionOeuvre(id);
-            return ResponseEntity.ok().build();
+            artService.suppressionOeuvre(id, login);
+            return ResponseEntity.noContent().build();
         }
-        catch(OeuvreNotFoundException e){
+        catch(OeuvreNotFoundException | UtilisateurIncorrectException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.toString());
         }
     }
 
-    @PostMapping(value = "/oeuvres/{idCategorie}")
-    public ResponseEntity<?> ajoutOeuvre(@RequestBody Oeuvre oeuvre,@PathVariable Long idCategorie) {
-        try {
-            artService.ajoutOeuvre(oeuvre,idCategorie);
-            return new ResponseEntity<>(oeuvre, HttpStatus.CREATED);
-        } catch (CategorieExistePasException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.toString());
-        }
-    }
-
-    @PutMapping(value = "/oeuvres/{idOeuvre}/titre/{titre}")
+    @PutMapping(value = "/oeuvres/{idOeuvre}")
     public ResponseEntity<?> modifierOeuvre(@PathVariable(value = "idOeuvre") Long idOeuvre,
-                                            @PathVariable(value = "titre") String titre) {
+                                            @RequestBody OeuvreDTO oeuvredto,
+                                            KeycloakAuthenticationToken principal) {
+        SimpleKeycloakAccount simpleKeycloakAccount = (SimpleKeycloakAccount) principal.getDetails();
+        AccessToken token  = simpleKeycloakAccount.getKeycloakSecurityContext().getToken();
+        String login=token.getGivenName();
         try {
-            artService.modifierOeuvreTitre(titre, idOeuvre);
-            return ResponseEntity.ok().body(getOeuvreById(idOeuvre));
-        } catch (OeuvreNotFoundException e) {
+            Oeuvre oeuvre = mapper.map(oeuvredto, Oeuvre.class);
+            artService.modifierOeuvreTitre(oeuvre, idOeuvre, login);
+            Oeuvre oeuvreModif = artService.getOeuvreById(idOeuvre).get();
+            OeuvreDTO oeuvreDTO = mapper.map(oeuvreModif, OeuvreDTO.class);
+            return  ResponseEntity.ok().body(oeuvreDTO);
+        } catch (OeuvreNotFoundException | UtilisateurIncorrectException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.toString());
         }
     }
-
-
-
-
-
 }
 

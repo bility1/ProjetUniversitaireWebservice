@@ -1,23 +1,27 @@
 package fr.artapp.artservice.service;
 
-import fr.artapp.artservice.Exception.CategorieExistePasException;
 import fr.artapp.artservice.Exception.CategorieNotFoundException;
+import fr.artapp.artservice.Exception.ForeignKeyCollisionException;
 import fr.artapp.artservice.Exception.OeuvreNotFoundException;
 import fr.artapp.artservice.model.Categorie;
 import fr.artapp.artservice.model.Oeuvre;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public interface CategorieService {
 
-    Collection<Categorie> getAllCategorie() throws CategorieNotFoundException;
+    Collection<Categorie> getAllCategorie();
+
+    Optional<Categorie> getCategorieById(Long id) throws CategorieNotFoundException;
+
+    Collection<Oeuvre> getAllOeuvreByCategorie(String nomCategorie) throws CategorieNotFoundException;
 
     Categorie ajoutCategorie(Categorie categorie);
 
-    Collection<Oeuvre> getAllOeuvreByCategorie(String nomCategorie) throws CategorieExistePasException, OeuvreNotFoundException;
+    void modifierCategorie(Long id, Categorie categorie) throws CategorieNotFoundException;
+
+    void suppressionCategorie(Long id) throws CategorieNotFoundException, ForeignKeyCollisionException;
 
 
-    Categorie modifierCategorie(Long id, String categorie) throws OeuvreNotFoundException;
-
-    void suppressionCategorie(Long id) throws CategorieNotFoundException;
 }

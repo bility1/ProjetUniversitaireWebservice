@@ -1,9 +1,6 @@
 package fr.artapp.artservice.service;
 
-import fr.artapp.artservice.Exception.CategorieExistePasException;
-import fr.artapp.artservice.Exception.OeuvreExisteDejaException;
-import fr.artapp.artservice.Exception.OeuvreNotFoundException;
-import fr.artapp.artservice.model.Categorie;
+import fr.artapp.artservice.Exception.*;
 import fr.artapp.artservice.model.Oeuvre;
 
 import java.util.Collection;
@@ -11,18 +8,18 @@ import java.util.Optional;
 
 public interface ArtService {
 
-    Collection<Oeuvre> getAllOeuvres() throws OeuvreNotFoundException;
+    Collection<Oeuvre> getAllOeuvres();
 
     Optional<Oeuvre> getOeuvreById(Long id) throws OeuvreNotFoundException;
 
-    Collection<Oeuvre> getAllOeuvreByTitre(String titre) throws OeuvreNotFoundException;
+    Collection<Oeuvre> getAllOeuvreByTitre(String titre) throws TitreNotFoundException;
 
-    Oeuvre ajoutOeuvre(Oeuvre oeuvre,Long idCategorie) throws CategorieExistePasException;
+    Collection<Oeuvre> getAllOeuvresByUtilisateur(String login) throws UtilisateurNotFoundException;
 
-    void suppressionOeuvre(Long id) throws OeuvreNotFoundException;
+    void ajoutOeuvre(Oeuvre oeuvre, String loginId) throws CategorieNotFoundException;
 
-    Oeuvre modifierOeuvreTitre(String titre, Long idOeuvre) throws OeuvreNotFoundException;
+    void suppressionOeuvre(Long id, String loginId) throws OeuvreNotFoundException, UtilisateurIncorrectException;
 
-    //Oeuvre getOeuvreByUser(User user);
+    void modifierOeuvreTitre(Oeuvre oeuvre, Long idOeuvre, String loginId) throws OeuvreNotFoundException, UtilisateurIncorrectException;
 
 }

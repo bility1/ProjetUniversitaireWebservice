@@ -37,7 +37,9 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
         http.authorizeRequests()
-                .antMatchers("/hello").authenticated()
+                .antMatchers("/oeuvres/**").authenticated() //il faut être authentifié pour avoir accès à oeuvre/
+                .antMatchers("/oeuvres").authenticated()
+                .antMatchers("/oeuvres/categorie/").hasRole("ADMIN")
                 .anyRequest()
                 .permitAll();
         http.csrf().disable();

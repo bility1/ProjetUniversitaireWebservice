@@ -1,9 +1,6 @@
 package fr.artapp.artservice.service;
 
-import fr.artapp.artservice.Exception.CategorieExistePasException;
-import fr.artapp.artservice.Exception.OeuvreExisteDejaException;
-import fr.artapp.artservice.Exception.OeuvreNotFoundException;
-import fr.artapp.artservice.model.Categorie;
+import fr.artapp.artservice.Exception.*;
 import fr.artapp.artservice.model.Oeuvre;
 import fr.artapp.artservice.repository.CategorieRepositery;
 import fr.artapp.artservice.repository.OeuvreRepository;
@@ -23,11 +20,8 @@ public class ArtServiceImpl implements ArtService{
     CategorieRepositery categorieRepositery;
 
     @Override
-    public Collection<Oeuvre> getAllOeuvres() throws OeuvreNotFoundException{
+    public Collection<Oeuvre> getAllOeuvres(){
         Collection<Oeuvre> oeuvre = (Collection<Oeuvre>) oeuvreRepository.findAll();
-        if (oeuvre.isEmpty()){
-            throw new OeuvreNotFoundException();
-        }
         return oeuvre;
     }
 
@@ -42,50 +36,61 @@ public class ArtServiceImpl implements ArtService{
     }
 
     @Override
-    public void suppressionOeuvre(Long id) throws OeuvreNotFoundException {
-        if (oeuvreRepository.existsById(id)){
-            oeuvreRepository.deleteById(id);
+    public Collection<Oeuvre> getAllOeuvreByTitre(String titre) throws TitreNotFoundException {
+        if (oeuvreRepository.existsByTitre(titre)){
+            return oeuvreRepository.findAllByTitre(titre);
         }
         else{
-            throw new OeuvreNotFoundException();
+            throw new TitreNotFoundException();
         }
     }
 
     @Override
-    public Oeuvre ajoutOeuvre(Oeuvre oeuvre,Long idCategorie) throws CategorieExistePasException {
+    public Collection<Oeuvre> getAllOeuvresByUtilisateur(String login ) throws UtilisateurNotFoundException {
+        if (oeuvreRepository.existsByUtilisateurId(login)){
+            return oeuvreRepository.findAllByUtilisateurId(login);
+        }
+        else{
+            throw new UtilisateurNotFoundException();
+        }
+    }
+
+    @Override
+    public void ajoutOeuvre(Oeuvre oeuvre, String login) throws CategorieNotFoundException {
+        oeuvre.setCategorie(oeuvre.getCategorie());
+        oeuvre.setUtilisateurId(login);  //ajout du login de l'utilisateur connecté à la création de l'oeuvre
+
+        Long idCategorie = oeuvre.getCategorie().getId();
         if (!categorieRepositery.existsById(idCategorie)) {
-            throw new CategorieExistePasException();
+            throw new CategorieNotFoundException();
         }
-        Optional<Categorie> categorie = categorieRepositery.findById(idCategorie);
-        oeuvre.setCategorie(categorie.get());
-        return oeuvreRepository.save(oeuvre);
+        oeuvreRepository.save(oeuvre);
     }
 
     @Override
-    public Collection<Oeuvre> getAllOeuvreByTitre(String titre) throws OeuvreNotFoundException{
-        Collection<Oeuvre> oeuvre = oeuvreRepository.findAllByTitre(titre);
-        if (oeuvre.isEmpty()){
+    public void suppressionOeuvre(Long id, String login) throws OeuvreNotFoundException, UtilisateurIncorrectException {
+        if (!oeuvreRepository.existsById(id)){
             throw new OeuvreNotFoundException();
         }
-        return oeuvre;
+        Oeuvre oeuvre = oeuvreRepository.findById(id).get();
+        if(!oeuvre.getUtilisateurId().equals(login) ){
+            throw new UtilisateurIncorrectException();
+        }
+        oeuvreRepository.deleteById(id);
     }
 
     @Override
-    public Oeuvre modifierOeuvreTitre(String titre, Long idOeuvre) throws OeuvreNotFoundException{
-        if (!oeuvreRepository.existsById(idOeuvre)) {
+    public void modifierOeuvreTitre(Oeuvre oeuvre, Long idOeuvre, String login) throws OeuvreNotFoundException, UtilisateurIncorrectException{
+        if(!oeuvreRepository.existsById(idOeuvre)) {
             throw new OeuvreNotFoundException();
         }
-        Oeuvre oeuvre = oeuvreRepository.findById(idOeuvre).orElse(new Oeuvre());
-        oeuvre.setTitre(titre);
-        return oeuvreRepository.save(oeuvre);
+        Oeuvre oeuvreModif = oeuvreRepository.findById(idOeuvre).get();
+        if(!oeuvreModif.getUtilisateurId().equals(login)){
+            throw new UtilisateurIncorrectException();
+        }
+        String titre = oeuvre.getTitre();
+        oeuvreModif.setTitre(titre);
+        oeuvreRepository.save(oeuvreModif);
     }
-
-/*
-        @Override
-    public void oeuvreByUser(String title) {
-        //to do
-    }
-
-    */
 
 }
