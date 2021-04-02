@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.Set;
 
 
 @Service
@@ -37,8 +38,9 @@ public class ReviewServiceImpl implements ReviewService {
     public void suppressionReview(String id, AccessToken token) throws ReviewNotFoundException,LoginNotCorrectException {
         Optional<Review> review = reviewRepository.findByIdAvis(id);
         String login = token.getGivenName();
+        Set<String> test = token.getResourceAccess().get("service-web").getRoles();
         if (reviewRepository.existsByIdAvis(id)){
-            if(!login.equals(review.get().getLoginUtilisateur())){
+            if(!login.equals(review.get().getLoginUtilisateur()) && !test.contains("ADMIN")){
                 throw new LoginNotCorrectException();
             }else{
                 reviewRepository.deleteByIdAvis(id);

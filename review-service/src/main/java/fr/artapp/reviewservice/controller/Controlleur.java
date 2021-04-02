@@ -90,6 +90,7 @@ public class Controlleur {
         SimpleKeycloakAccount simpleKeycloakAccount = (SimpleKeycloakAccount) principal.getDetails();
         AccessToken token  = simpleKeycloakAccount.getKeycloakSecurityContext().getToken();
         //String login=token.getGivenName();
+
         try {
             reviewService.suppressionReview(id,token);
         } catch (ReviewNotFoundException e) {
