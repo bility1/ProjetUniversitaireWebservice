@@ -2,6 +2,7 @@ package fr.artapp.artservice.service;
 
 import fr.artapp.artservice.Exception.*;
 import fr.artapp.artservice.model.Oeuvre;
+import org.springframework.core.io.Resource;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -22,4 +23,5 @@ public interface ArtService {
 
     void modifierOeuvreTitre(Oeuvre oeuvre, Long idOeuvre, String loginId) throws OeuvreNotFoundException, UtilisateurIncorrectException;
 
+    Resource telechargerImage(Long imageId);
 }

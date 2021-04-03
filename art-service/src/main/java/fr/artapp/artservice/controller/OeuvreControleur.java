@@ -8,6 +8,8 @@ import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.keycloak.representations.AccessToken;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +17,11 @@ import org.springframework.http.client.BufferingClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
+import reactor.core.publisher.Mono;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +42,15 @@ public class OeuvreControleur {
                     new SimpleClientHttpRequestFactory()
             )
     );
+
+    @GetMapping(value = "/hello")
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<String> hello(){
+        String uri ="http://localhost:8089/api/review/hello";
+        String result = keycloakRestTemplate.getForObject(uri, String.class);
+
+        return Mono.just("hello artservice ! "+result);
+    }
 
     @GetMapping(value = "/oeuvres")
     @ResponseStatus(HttpStatus.OK)
@@ -88,16 +103,17 @@ public class OeuvreControleur {
     }
 
     @PostMapping(value = "/oeuvres")
-    public ResponseEntity<?> ajoutOeuvre(@RequestBody OeuvreDTO oeuvredto, KeycloakAuthenticationToken principal) {
+    public ResponseEntity<?> ajoutOeuvre(@RequestPart("oeuvre") OeuvreDTO oeuvredto,@RequestPart("multipartImage") MultipartFile multipartImage, KeycloakAuthenticationToken principal) {
         Oeuvre oeuvre = mapper.map(oeuvredto, Oeuvre.class);
         SimpleKeycloakAccount simpleKeycloakAccount = (SimpleKeycloakAccount) principal.getDetails();
         AccessToken token  = simpleKeycloakAccount.getKeycloakSecurityContext().getToken();
         String login=token.getGivenName();
         try {
+            oeuvre.setContent(multipartImage.getBytes());
             artService.ajoutOeuvre(oeuvre, login);
             OeuvreDTO oeuvreDTO = mapper.map(oeuvre, OeuvreDTO.class);
             return new ResponseEntity<>(oeuvreDTO, HttpStatus.CREATED);
-        } catch (CategorieNotFoundException e) {
+        } catch (CategorieNotFoundException | IOException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.toString());
         }
     }
@@ -133,6 +149,13 @@ public class OeuvreControleur {
         } catch (OeuvreNotFoundException | UtilisateurIncorrectException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.toString());
         }
+    }
+
+
+    @GetMapping(value = "/oeuvre/telechargement/{imageId}")
+    Resource downloadImageNew(@PathVariable Long imageId) {
+        return artService.telechargerImage(imageId);
+
     }
 }
 

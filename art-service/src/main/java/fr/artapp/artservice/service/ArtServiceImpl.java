@@ -5,7 +5,11 @@ import fr.artapp.artservice.model.Oeuvre;
 import fr.artapp.artservice.repository.CategorieRepositery;
 import fr.artapp.artservice.repository.OeuvreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -91,6 +95,15 @@ public class ArtServiceImpl implements ArtService{
         String titre = oeuvre.getTitre();
         oeuvreModif.setTitre(titre);
         oeuvreRepository.save(oeuvreModif);
+    }
+
+    @Override
+    public Resource telechargerImage(Long imageId) {
+        byte[] image = oeuvreRepository.findById(imageId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND))
+                .getContent();
+
+        return new ByteArrayResource(image);
     }
 
 }

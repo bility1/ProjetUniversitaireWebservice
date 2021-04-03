@@ -22,6 +22,8 @@ public class Oeuvre {
     private Categorie categorie;
     private String utilisateurId; //login utilisateur unique
     //attribut image
+    @Lob
+    private byte[] content;
 
     public Oeuvre(String titre, LocalDateTime date, Categorie categorie, String utilisateurId) {
         this.titre = titre;
@@ -74,6 +76,14 @@ public class Oeuvre {
 
     public void setUtilisateurId(String utilisateurId) {
         this.utilisateurId = utilisateurId;
+    }
+
+    public byte[] getContent() {
+        return content;
+    }
+
+    public void setContent(byte[] content) {
+        this.content = content;
     }
 }
 

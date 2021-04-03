@@ -2,6 +2,7 @@ package fr.artapp.artservice.DTO;
 
 import fr.artapp.artservice.model.Categorie;
 
+import javax.persistence.Lob;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -12,6 +13,7 @@ public class OeuvreDTO {
     private LocalDateTime date;
     private CategorieDTO categorie;
     private String utilisateurId; //login utilisateur unique
+    private byte[] content;
 
     public OeuvreDTO() {
     }
@@ -62,5 +64,13 @@ public class OeuvreDTO {
 
     public void setUtilisateurId(String utilisateurId) {
         this.utilisateurId = utilisateurId;
+    }
+
+    public byte[] getContent() {
+        return content;
+    }
+
+    public void setContent(byte[] content) {
+        this.content = content;
     }
 }
