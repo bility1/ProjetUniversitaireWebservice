@@ -38,9 +38,9 @@ public class ReviewServiceImpl implements ReviewService {
     public void suppressionReview(String id, AccessToken token) throws ReviewNotFoundException,LoginNotCorrectException {
         Optional<Review> review = reviewRepository.findByIdAvis(id);
         String login = token.getGivenName();
-        Set<String> test = token.getResourceAccess().get("service-web").getRoles();
+        Set<String> roles = token.getRealmAccess().getRoles();
         if (reviewRepository.existsByIdAvis(id)){
-            if(!login.equals(review.get().getLoginUtilisateur()) && !test.contains("ADMIN")){
+            if(!login.equals(review.get().getLoginUtilisateur()) && !roles.contains("ADMIN")){
                 throw new LoginNotCorrectException();
             }else{
                 reviewRepository.deleteByIdAvis(id);
