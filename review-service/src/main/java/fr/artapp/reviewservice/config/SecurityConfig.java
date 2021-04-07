@@ -17,6 +17,7 @@ import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @EnableWebSecurity
@@ -28,10 +29,8 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
         http.authorizeRequests()
-                .antMatchers("/hello").authenticated()
                 .antMatchers(HttpMethod.GET,"/avis").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST,"/avis").authenticated()
-                .antMatchers("/avis/**").authenticated()
+
                 .anyRequest()
                 .permitAll();
         http.csrf().disable();
@@ -56,6 +55,10 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     }
 
 
+    @Bean
+    RestTemplate restTemplate(){
+        return new RestTemplate();
+    }
 
 
 

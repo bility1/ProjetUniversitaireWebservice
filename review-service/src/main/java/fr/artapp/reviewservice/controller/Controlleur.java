@@ -3,6 +3,7 @@ package fr.artapp.reviewservice.controller;
 import fr.artapp.reviewservice.DTO.ReviewDTO;
 import fr.artapp.reviewservice.exceptions.LoginNotCorrectException;
 import fr.artapp.reviewservice.exceptions.NoteNotPossibleException;
+import fr.artapp.reviewservice.exceptions.OeuvreNotFoundException;
 import fr.artapp.reviewservice.exceptions.ReviewNotFoundException;
 import fr.artapp.reviewservice.model.Review;
 import fr.artapp.reviewservice.repository.ReviewRepository;
@@ -12,6 +13,7 @@ import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.keycloak.representations.AccessToken;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,9 +35,14 @@ import java.util.stream.Collectors;
 public class Controlleur {
     @Autowired
     ReviewService reviewService;
-
     @Autowired
     private ModelMapper mapper;
+    @Autowired
+    private RestTemplate restTemplate;
+    @Value("${hostUrl}")
+    private String hostUrl;
+
+
 
     private Map<Long,ReplayProcessor<ReviewDTO>> listNotifications  =  new HashMap<Long,ReplayProcessor<ReviewDTO>>();
 
@@ -48,12 +55,6 @@ public class Controlleur {
         }
     }
 
-    @GetMapping(value = "/hello")
-    @ResponseStatus(HttpStatus.OK)
-    public Mono<String> hello(){
-
-        return Mono.just("hello rewiew ! ");
-    }
 
 
     @GetMapping(value = "/avis/subscribe/{idOeuvre}", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
@@ -71,7 +72,12 @@ public class Controlleur {
         AccessToken token  = simpleKeycloakAccount.getKeycloakSecurityContext().getToken();
         Review reviewBody = mapper.map(reviewBodyDTO, Review.class);
         reviewBody.setLoginUtilisateur(token.getGivenName());
+        String uri =hostUrl+"/api/art/oeuvres/"+reviewBody.getIdOeuvre();
+
+
         try {
+            ResponseEntity<String> reponse = restTemplate.getForEntity(uri, String.class);
+          //  reviewService.verifOeuvreExist(reponse);
             reviewService.setReview(reviewBody);
             // notification d'un nouveau avis dans le Stream
             verifReplayProcessorExist(reviewBody.getIdOeuvre());
@@ -80,9 +86,11 @@ public class Controlleur {
             notifications.onNext(reviewDTO);
             URI location = base.path("/api/avis/{id}").buildAndExpand(reviewBody).toUri();
             return ResponseEntity.created(location).body(reviewDTO);
-        } catch (NoteNotPossibleException e) {
-            e.printStackTrace();
+        } catch (NoteNotPossibleException e ) {
+           // e.printStackTrace();
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.toString());
+        } catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.toString());
         }
 
     }

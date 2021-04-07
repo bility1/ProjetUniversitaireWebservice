@@ -2,11 +2,14 @@ package fr.artapp.reviewservice.service;
 
 import fr.artapp.reviewservice.exceptions.LoginNotCorrectException;
 import fr.artapp.reviewservice.exceptions.NoteNotPossibleException;
+import fr.artapp.reviewservice.exceptions.OeuvreNotFoundException;
 import fr.artapp.reviewservice.exceptions.ReviewNotFoundException;
 import fr.artapp.reviewservice.model.Review;
 import fr.artapp.reviewservice.repository.ReviewRepository;
 import org.keycloak.representations.AccessToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -87,6 +90,14 @@ public class ReviewServiceImpl implements ReviewService {
             reviewModif.setNote(note);
         }
         return reviewRepository.save(reviewModif);
+    }
+
+    @Override
+    public void verifOeuvreExist(ResponseEntity<String> response) throws OeuvreNotFoundException {
+        if(!(response.getStatusCode() == HttpStatus.OK)){
+            throw new OeuvreNotFoundException();
+        }
+
     }
 
 
