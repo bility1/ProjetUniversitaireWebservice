@@ -18,6 +18,7 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 @EnableWebSecurity
@@ -30,7 +31,6 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         super.configure(http);
         http.authorizeRequests()
                 .antMatchers(HttpMethod.GET,"/avis").hasRole("ADMIN")
-
                 .anyRequest()
                 .permitAll();
         http.csrf().disable();
@@ -55,11 +55,10 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     }
 
 
+
     @Bean
-    RestTemplate restTemplate(){
-        return new RestTemplate();
+    WebClient.Builder webClientBuilder(){
+        return  WebClient.builder();
     }
-
-
 
 }

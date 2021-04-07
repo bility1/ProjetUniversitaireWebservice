@@ -22,6 +22,7 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -37,8 +38,12 @@ public class Controlleur {
     ReviewService reviewService;
     @Autowired
     private ModelMapper mapper;
-    @Autowired
+  /*  @Autowired
     private RestTemplate restTemplate;
+   */
+    @Autowired
+    private WebClient.Builder webClientBuilder;
+
     @Value("${hostUrl}")
     private String hostUrl;
 
@@ -76,7 +81,13 @@ public class Controlleur {
 
 
         try {
-            ResponseEntity<String> reponse = restTemplate.getForEntity(uri, String.class);
+
+            ResponseEntity reponse= webClientBuilder.build().get()
+                                            .uri(uri)
+                                            .retrieve()
+                                            .toBodilessEntity()
+                                            .block();
+          //   ResponseEntity<String> reponse = restTemplate.getForEntity(uri, String.class);
           //  reviewService.verifOeuvreExist(reponse);
             reviewService.setReview(reviewBody);
             // notification d'un nouveau avis dans le Stream
