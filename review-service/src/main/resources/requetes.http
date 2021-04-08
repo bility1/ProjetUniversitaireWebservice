@@ -1,9 +1,0 @@
-POST http://localhost:8083/avis
-Content-Type: application/json
-Accept: application/json
-
-{"id": 1, "note": 3,"commentaire": "il est beau","idOeuvre": 1}
-
-###
-
-GET http://localhost:8085/hello

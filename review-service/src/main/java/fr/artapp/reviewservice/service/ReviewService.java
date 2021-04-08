@@ -24,5 +24,4 @@ public interface ReviewService {
 
     Review modifierReview(String idAvis, Review review, String login) throws NoteNotPossibleException, LoginNotCorrectException, ReviewNotFoundException;
 
-    void verifOeuvreExist(ResponseEntity<String> response) throws OeuvreNotFoundException;
 }

@@ -92,13 +92,7 @@ public class ReviewServiceImpl implements ReviewService {
         return reviewRepository.save(reviewModif);
     }
 
-    @Override
-    public void verifOeuvreExist(ResponseEntity<String> response) throws OeuvreNotFoundException {
-        if(!(response.getStatusCode() == HttpStatus.OK)){
-            throw new OeuvreNotFoundException();
-        }
 
-    }
 
 
 }

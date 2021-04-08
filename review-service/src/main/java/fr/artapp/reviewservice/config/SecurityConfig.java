@@ -6,6 +6,8 @@ import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
 import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -31,6 +33,8 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         super.configure(http);
         http.authorizeRequests()
                 .antMatchers(HttpMethod.GET,"/avis").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/avis").authenticated()
+                .antMatchers("/avis/**").authenticated()
                 .anyRequest()
                 .permitAll();
         http.csrf().disable();
@@ -55,10 +59,5 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     }
 
 
-
-    @Bean
-    WebClient.Builder webClientBuilder(){
-        return  WebClient.builder();
-    }
 
 }

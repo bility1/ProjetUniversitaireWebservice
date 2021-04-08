@@ -61,7 +61,11 @@ services:
     environment:
       - JAVA_TOOL_OPTIONS=
         -DCONSUL_HOST=discovery
-      - SPRING_DATASOURCE_URL=jdbc:mysql://dcmysql-art:3306/art?allowPublicKeyRetrieval=true&useSSL=false
+        -DMYSQL_HOST=dcmysql-art
+        -DMYSQL_PORT=3306
+        -DKEYCLOAK_HOST=keycloak
+        -DKEYCLOAK_PORT=8080
+      #- SPRING_DATASOURCE_URL=jdbc:mysql://dcmysql-art:3306/art?allowPublicKeyRetrieval=true&useSSL=false
     networks:
       - defaultnet
     depends_on:
@@ -73,6 +77,8 @@ services:
     environment:
       - JAVA_TOOL_OPTIONS=
         -DCONSUL_HOST=discovery
+        -DKEYCLOAK_HOST=keycloak
+        -DKEYCLOAK_PORT=8080
     networks:
       - defaultnet
     depends_on:
@@ -84,8 +90,8 @@ services:
   dc-mongodb:
     build: mongo/
     container_name: mongodb
-    restart: always
     environment:
+
       #MONGO_INITDB_ROOT_USERNAME: root
       #MONGO_INITDB_ROOT_PASSWORD: root
       MONGO_INITDB_DATABASE: review
@@ -99,6 +105,11 @@ services:
     environment:
       - JAVA_TOOL_OPTIONS=
         -DCONSUL_HOST=discovery
+        -DMONGODB_HOST=mongodb
+        -DMONGODB_PORT=27017
+        -DKEYCLOAK_HOST=keycloak
+        -DKEYCLOAK_PORT=8080
+
     networks:
       - defaultnet
     depends_on:
