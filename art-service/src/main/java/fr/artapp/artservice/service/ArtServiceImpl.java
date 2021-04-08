@@ -4,6 +4,7 @@ import fr.artapp.artservice.Exception.*;
 import fr.artapp.artservice.model.Oeuvre;
 import fr.artapp.artservice.repository.CategorieRepositery;
 import fr.artapp.artservice.repository.OeuvreRepository;
+import org.keycloak.representations.AccessToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -13,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class ArtServiceImpl implements ArtService{
@@ -60,7 +62,7 @@ public class ArtServiceImpl implements ArtService{
     }
 
     @Override
-    public void ajoutOeuvre(Oeuvre oeuvre, String login) throws CategorieNotFoundException {
+    public Oeuvre ajoutOeuvre(Oeuvre oeuvre, String login) throws CategorieNotFoundException {
         oeuvre.setCategorie(oeuvre.getCategorie());
         oeuvre.setUtilisateurId(login);  //ajout du login de l'utilisateur connecté à la création de l'oeuvre
 
@@ -68,23 +70,24 @@ public class ArtServiceImpl implements ArtService{
         if (!categorieRepositery.existsById(idCategorie)) {
             throw new CategorieNotFoundException();
         }
-        oeuvreRepository.save(oeuvre);
+        return oeuvreRepository.save(oeuvre);
     }
 
     @Override
-    public void suppressionOeuvre(Long id, String login) throws OeuvreNotFoundException, UtilisateurIncorrectException {
+    public void suppressionOeuvre(Long id, AccessToken token) throws OeuvreNotFoundException, UtilisateurIncorrectException {
         if (!oeuvreRepository.existsById(id)){
             throw new OeuvreNotFoundException();
         }
+        Set<String> roles = token.getRealmAccess().getRoles();
         Oeuvre oeuvre = oeuvreRepository.findById(id).get();
-        if(!oeuvre.getUtilisateurId().equals(login) ){
+        if(!oeuvre.getUtilisateurId().equals(token.getGivenName()) && !roles.contains("ADMIN") ){
             throw new UtilisateurIncorrectException();
         }
         oeuvreRepository.deleteById(id);
     }
 
     @Override
-    public void modifierOeuvreTitre(Oeuvre oeuvre, Long idOeuvre, String login) throws OeuvreNotFoundException, UtilisateurIncorrectException{
+    public Oeuvre modifierOeuvreTitre(Oeuvre oeuvre, Long idOeuvre, String login) throws OeuvreNotFoundException, UtilisateurIncorrectException{
         if(!oeuvreRepository.existsById(idOeuvre)) {
             throw new OeuvreNotFoundException();
         }
@@ -94,7 +97,7 @@ public class ArtServiceImpl implements ArtService{
         }
         String titre = oeuvre.getTitre();
         oeuvreModif.setTitre(titre);
-        oeuvreRepository.save(oeuvreModif);
+        return oeuvreRepository.save(oeuvreModif);
     }
 
     @Override

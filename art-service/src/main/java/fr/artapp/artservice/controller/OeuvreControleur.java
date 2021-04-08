@@ -36,22 +36,6 @@ public class OeuvreControleur {
     @Autowired
     private ModelMapper mapper;
 
-    //cases of use  : calling an other backend service to get or post data
-    RestTemplate keycloakRestTemplate  = new RestTemplate(
-            new BufferingClientHttpRequestFactory(
-                    new SimpleClientHttpRequestFactory()
-            )
-    );
-
-    @GetMapping(value = "/hello")
-    @ResponseStatus(HttpStatus.OK)
-    public Mono<String> hello(){
-        String uri ="http://localhost:8089/api/review/hello";
-        String result = keycloakRestTemplate.getForObject(uri, String.class);
-
-        return Mono.just("hello artservice ! "+result);
-    }
-
     @GetMapping(value = "/oeuvres")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> getAllOeuvres(){
@@ -110,8 +94,8 @@ public class OeuvreControleur {
         String login=token.getGivenName();
         try {
             oeuvre.setContent(multipartImage.getBytes());
-            artService.ajoutOeuvre(oeuvre, login);
-            OeuvreDTO oeuvreDTO = mapper.map(oeuvre, OeuvreDTO.class);
+            Oeuvre oeuvreNouveau = artService.ajoutOeuvre(oeuvre, login);
+            OeuvreDTO oeuvreDTO = mapper.map(oeuvreNouveau, OeuvreDTO.class);
             return new ResponseEntity<>(oeuvreDTO, HttpStatus.CREATED);
         } catch (CategorieNotFoundException | IOException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.toString());
@@ -123,9 +107,8 @@ public class OeuvreControleur {
                                                     KeycloakAuthenticationToken principal) {
         SimpleKeycloakAccount simpleKeycloakAccount = (SimpleKeycloakAccount) principal.getDetails();
         AccessToken token  = simpleKeycloakAccount.getKeycloakSecurityContext().getToken();
-        String login=token.getGivenName();
         try {
-            artService.suppressionOeuvre(id, login);
+            artService.suppressionOeuvre(id, token);
             return ResponseEntity.noContent().build();
         }
         catch(OeuvreNotFoundException | UtilisateurIncorrectException e){
@@ -142,8 +125,7 @@ public class OeuvreControleur {
         String login=token.getGivenName();
         try {
             Oeuvre oeuvre = mapper.map(oeuvredto, Oeuvre.class);
-            artService.modifierOeuvreTitre(oeuvre, idOeuvre, login);
-            Oeuvre oeuvreModif = artService.getOeuvreById(idOeuvre).get();
+            Oeuvre oeuvreModif = artService.modifierOeuvreTitre(oeuvre, idOeuvre, login);
             OeuvreDTO oeuvreDTO = mapper.map(oeuvreModif, OeuvreDTO.class);
             return  ResponseEntity.ok().body(oeuvreDTO);
         } catch (OeuvreNotFoundException | UtilisateurIncorrectException e) {

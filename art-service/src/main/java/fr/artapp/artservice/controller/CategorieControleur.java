@@ -37,14 +37,6 @@ public class CategorieControleur {
 
     }
 
-    @PostMapping(value = "/oeuvres/categorie")
-    public ResponseEntity<?> ajoutCategorie(@RequestBody CategorieDTO categorieDto)  {
-        Categorie categorie = mapper.map(categorieDto, Categorie.class);
-        categorieService.ajoutCategorie(categorie);
-        CategorieDTO categorieDTO = mapper.map(categorie, CategorieDTO.class);
-        return new ResponseEntity<>(categorieDTO, HttpStatus.CREATED);
-    }
-
     @GetMapping(value = "/oeuvres/categorie/{nomCategorie}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllOeuvreByCategorie(@PathVariable String nomCategorie) {
         try {
@@ -58,13 +50,20 @@ public class CategorieControleur {
         }
     }
 
+    @PostMapping(value = "/oeuvres/categorie")
+    public ResponseEntity<?> ajoutCategorie(@RequestBody CategorieDTO categorieDto)  {
+        Categorie categorie = mapper.map(categorieDto, Categorie.class);
+        categorieService.ajoutCategorie(categorie);
+        CategorieDTO categorieDTO = mapper.map(categorie, CategorieDTO.class);
+        return new ResponseEntity<>(categorieDTO, HttpStatus.CREATED);
+    }
+
     @PutMapping(value = "/oeuvres/categorie/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> modifierCategorie(@PathVariable Long id,
                                                        @RequestBody CategorieDTO categoriedto) {
         try {
             Categorie categorie = mapper.map(categoriedto, Categorie.class);
-            categorieService.modifierCategorie(id, categorie);
-            Categorie categorieModif = categorieService.getCategorieById(id).get();
+            Categorie categorieModif = categorieService.modifierCategorie(id, categorie);
             CategorieDTO categorieDTO = mapper.map(categorieModif, CategorieDTO.class);
             return ResponseEntity.ok().body(categorieDTO);
         } catch (CategorieNotFoundException e) {

@@ -19,7 +19,7 @@ public interface CategorieService {
 
     Categorie ajoutCategorie(Categorie categorie);
 
-    void modifierCategorie(Long id, Categorie categorie) throws CategorieNotFoundException;
+    Categorie modifierCategorie(Long id, Categorie categorie) throws CategorieNotFoundException;
 
     void suppressionCategorie(Long id) throws CategorieNotFoundException, ForeignKeyCollisionException;
 

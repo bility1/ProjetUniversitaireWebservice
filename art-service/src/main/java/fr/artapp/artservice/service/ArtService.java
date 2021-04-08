@@ -2,6 +2,7 @@ package fr.artapp.artservice.service;
 
 import fr.artapp.artservice.Exception.*;
 import fr.artapp.artservice.model.Oeuvre;
+import org.keycloak.representations.AccessToken;
 import org.springframework.core.io.Resource;
 
 import java.util.Collection;
@@ -17,11 +18,11 @@ public interface ArtService {
 
     Collection<Oeuvre> getAllOeuvresByUtilisateur(String login) throws UtilisateurNotFoundException;
 
-    void ajoutOeuvre(Oeuvre oeuvre, String loginId) throws CategorieNotFoundException;
+    Oeuvre ajoutOeuvre(Oeuvre oeuvre, String loginId) throws CategorieNotFoundException;
 
-    void suppressionOeuvre(Long id, String loginId) throws OeuvreNotFoundException, UtilisateurIncorrectException;
+    Oeuvre modifierOeuvreTitre(Oeuvre oeuvre, Long idOeuvre, String loginId) throws OeuvreNotFoundException, UtilisateurIncorrectException;
 
-    void modifierOeuvreTitre(Oeuvre oeuvre, Long idOeuvre, String loginId) throws OeuvreNotFoundException, UtilisateurIncorrectException;
+    void suppressionOeuvre(Long id, AccessToken token) throws OeuvreNotFoundException, UtilisateurIncorrectException;
 
     Resource telechargerImage(Long imageId);
 }

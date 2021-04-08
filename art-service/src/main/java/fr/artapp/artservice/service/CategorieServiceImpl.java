@@ -54,14 +54,14 @@ public class CategorieServiceImpl implements CategorieService{
     }
 
     @Override
-    public void modifierCategorie(Long id, Categorie categorie) throws CategorieNotFoundException {
+    public Categorie modifierCategorie(Long id, Categorie categorie) throws CategorieNotFoundException {
         if(!categorieRepositery.existsById(id)) {
             throw new CategorieNotFoundException();
         }
         Categorie categorieModif = categorieRepositery.findById(id).get();
         String nomCategorie = categorie.getNomCategorie();
         categorieModif.setNomCategorie(nomCategorie);
-        categorieRepositery.save(categorieModif);
+        return categorieRepositery.save(categorieModif);
     }
 
     @Override
@@ -70,6 +70,7 @@ public class CategorieServiceImpl implements CategorieService{
             throw new CategorieNotFoundException();
         }
         Categorie categorie = categorieRepositery.findById(id).get();
+        //verification que la categorie ne contient plus aucune oeuvre
         if (getAllOeuvreByCategorie(categorie.getNomCategorie()).size() != 0){
             throw new ForeignKeyCollisionException();
         }
