@@ -1,28 +1,18 @@
-package fr.artapp.reviewservice.model;
+package fr.artapp.reviewservice.DTO;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
-@Document(collection = "avis")
-public class Review {
+public class ReviewDTO {
 
-    @Id
     private String idAvis;
-    @Field(value = "note")
     private Integer note;
-    @Field(value = "commentaire")
     private String commentaire;
-    @Field(value = "idOeuvre")
     private Long idOeuvre;
-    @Field(value = "loginUtilisateur")
     private String loginUtilisateur;
 
-    public Review() {
+    public ReviewDTO() {
     }
 
-    public Review(String idAvis, Integer note, String commentaire, Long idOeuvre, String loginUtilisateur) {
+    public ReviewDTO(String idAvis, Integer note, String commentaire, Long idOeuvre, String loginUtilisateur) {
         this.idAvis = idAvis;
         this.note = note;
         this.commentaire = commentaire;
@@ -69,4 +59,5 @@ public class Review {
     public void setLoginUtilisateur(String loginUtilisateur) {
         this.loginUtilisateur = loginUtilisateur;
     }
+
 }
