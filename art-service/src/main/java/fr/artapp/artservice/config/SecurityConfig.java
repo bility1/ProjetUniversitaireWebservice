@@ -38,8 +38,9 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
         http.authorizeRequests()
-                .antMatchers("/oeuvres/**").authenticated() //il faut être authentifie pour avoir acces a oeuvre/
-                .antMatchers("/oeuvres").authenticated()
+                                     //il faut être authentifie pour avoir acces a oeuvre/
+                .antMatchers(HttpMethod.POST,"/oeuvres/**").authenticated()
+                .antMatchers(HttpMethod.DELETE,"/oeuvres/**").authenticated()
                 .antMatchers(HttpMethod.DELETE,"/oeuvres/categorie/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT,"/oeuvres/categorie/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST,"/oeuvres/categorie").hasRole("ADMIN")
@@ -73,32 +74,5 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     }
 
 
-
-    @Bean
-    @RequestScope
-    public RestTemplate keycloakRestTemplate(HttpServletRequest inReq) {
-        //récupérer l'en-tête d'authentification de la demande entrante
-        final String authHeader =
-                inReq.getHeader(HttpHeaders.AUTHORIZATION);
-        System.out.println("TOKEN ++++++++++++"+authHeader);
-        RestTemplate restTemplate = new RestTemplate();
-        //
-        //ajouter un token seulement si un en-tête d'authentification entrant existe
-        if (authHeader != null && !authHeader.isEmpty()) {
-            // puisque l'en-tête doit être ajouté à chaque requête sortante,
-            // ajoute un intercepteur qui gère cela.
-            List<ClientHttpRequestInterceptor> interceptors
-                    = restTemplate.getInterceptors();
-            if (CollectionUtils.isEmpty(interceptors)) {
-                interceptors = new ArrayList<>();
-            }
-
-            interceptors.add(new RestTemplateHeaderModifierInterceptor(authHeader)  );
-            restTemplate.setInterceptors(interceptors);
-
-
-        }
-        return restTemplate;
-    }
 
 }
