@@ -12,7 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Optional;
 import java.util.Set;
 
@@ -65,6 +68,11 @@ public class ArtServiceImpl implements ArtService{
     public Oeuvre ajoutOeuvre(Oeuvre oeuvre, String login) throws CategorieNotFoundException {
         oeuvre.setCategorie(oeuvre.getCategorie());
         oeuvre.setUtilisateurId(login);  //ajout du login de l'utilisateur connecté à la création de l'oeuvre
+
+        //recuperation de la date du jour
+        DateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        oeuvre.setDate(format.format(date));
 
         Long idCategorie = oeuvre.getCategorie().getId();
         if (!categorieRepositery.existsById(idCategorie)) {

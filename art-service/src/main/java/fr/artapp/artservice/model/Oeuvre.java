@@ -16,7 +16,7 @@ public class Oeuvre {
     private Long id;
     //@Column (name = "titre")
     private String titre;
-    private LocalDateTime date;
+    private String date;
     @JsonBackReference
     @ManyToOne
     private Categorie categorie;
@@ -25,7 +25,7 @@ public class Oeuvre {
     @Lob
     private byte[] content;
 
-    public Oeuvre(String titre, LocalDateTime date, Categorie categorie, String utilisateurId) {
+    public Oeuvre(String titre, String date, Categorie categorie, String utilisateurId) {
         this.titre = titre;
         this.date = date;
         this.categorie = categorie;
@@ -62,11 +62,11 @@ public class Oeuvre {
         this.id = id;
     }
 
-    public LocalDateTime getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

@@ -10,7 +10,7 @@ public class OeuvreDTO {
 
     private Long id;
     private String titre;
-    private LocalDateTime date;
+    private String date;
     private CategorieDTO categorie;
     private String utilisateurId; //login utilisateur unique
     private byte[] content;
@@ -18,7 +18,7 @@ public class OeuvreDTO {
     public OeuvreDTO() {
     }
 
-    public OeuvreDTO(Long id, String titre, LocalDateTime date, CategorieDTO categorie, String utilisateurId) {
+    public OeuvreDTO(Long id, String titre, String date, CategorieDTO categorie, String utilisateurId) {
         this.id = id;
         this.titre = titre;
         this.date = date;
@@ -42,11 +42,11 @@ public class OeuvreDTO {
         this.titre = titre;
     }
 
-    public LocalDateTime getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
