@@ -1,0 +1,8 @@
+fr.artapp.reviewservice
+fr.artapp.reviewservice.config
+fr.artapp.reviewservice.controller
+fr.artapp.reviewservice.DTO
+fr.artapp.reviewservice.exceptions
+fr.artapp.reviewservice.model
+fr.artapp.reviewservice.repository
+fr.artapp.reviewservice.service
