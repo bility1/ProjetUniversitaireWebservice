@@ -1,38 +1,25 @@
-package fr.artapp.artservice.model;
+package fr.artapp.artservice.DTO;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import fr.artapp.artservice.model.Oeuvre;
 
-import javax.persistence.*;
+import javax.persistence.OneToMany;
 import java.util.Set;
 
-@Entity
-public class Categorie {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class CategorieDTO {
+
     private Long id;
     private String nomCategorie;
-    @JsonManagedReference
-    @OneToMany(mappedBy = "categorie")
-    private Set<Oeuvre> oeuvre;
     private String description;
 
-    public Categorie(String nomCategorie, Set<Oeuvre> oeuvre, String description) {
+    public CategorieDTO(Long id, String nomCategorie, String description) {
+        this.id = id;
         this.nomCategorie = nomCategorie;
-        this.oeuvre = oeuvre;
         this.description = description;
     }
 
-    public Categorie() {
-    }
-
-    public Set<Oeuvre> getOeuvre() {
-        return oeuvre;
-    }
-
-    public void setOeuvre(Set<Oeuvre> oeuvre) {
-        this.oeuvre = oeuvre;
+    public CategorieDTO() {
     }
 
     public Long getId() {
@@ -59,4 +46,3 @@ public class Categorie {
         this.description = description;
     }
 }
-

@@ -9,6 +9,7 @@ import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurer
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -37,6 +38,17 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
         http.authorizeRequests()
+                .antMatchers("/oeuvres/**").authenticated() //il faut être authentifie pour avoir acces a oeuvre/
+                .antMatchers("/oeuvres").authenticated()
+                .antMatchers(HttpMethod.DELETE,"/oeuvres/categorie/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/oeuvres/categorie/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/oeuvres/categorie").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/oeuvres/categorie/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/oeuvres/categorie/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/oeuvres/proposition").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/oeuvres/proposition/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/oeuvres/proposition/").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/oeuvres/proposition/").hasRole("ADMIN")
                 .anyRequest()
                 .permitAll();
         http.csrf().disable();
@@ -61,7 +73,7 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     }
 
 
-/*
+
     @Bean
     @RequestScope
     public RestTemplate keycloakRestTemplate(HttpServletRequest inReq) {
@@ -81,14 +93,12 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
                 interceptors = new ArrayList<>();
             }
 
-           interceptors.add(new RestTemplateHeaderModifierInterceptor(authHeader)  );
+            interceptors.add(new RestTemplateHeaderModifierInterceptor(authHeader)  );
             restTemplate.setInterceptors(interceptors);
 
 
         }
         return restTemplate;
     }
-
- */
 
 }

@@ -1,14 +1,12 @@
 package fr.artapp.artservice.service;
 
-import fr.artapp.artservice.Exception.CategorieNotFoundException;
-import fr.artapp.artservice.Exception.ExceptionDejaException;
-import fr.artapp.artservice.Exception.OeuvreNotFoundException;
-import fr.artapp.artservice.model.Categorie;
+import fr.artapp.artservice.Exception.*;
 import fr.artapp.artservice.model.Oeuvre;
+import org.keycloak.representations.AccessToken;
+import org.springframework.core.io.Resource;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.UUID;
 
 public interface ArtService {
 
@@ -16,20 +14,15 @@ public interface ArtService {
 
     Optional<Oeuvre> getOeuvreById(Long id) throws OeuvreNotFoundException;
 
-    Oeuvre ajoutOeuvre(Oeuvre oeuvre,Long id);
-    Categorie ajoutCategorie(Categorie categorie);
+    Collection<Oeuvre> getAllOeuvreByTitre(String titre) throws TitreNotFoundException;
 
-    void suppressionOeuvre(Long id) throws OeuvreNotFoundException;
+    Collection<Oeuvre> getAllOeuvresByUtilisateur(String login) throws UtilisateurNotFoundException;
 
+    Oeuvre ajoutOeuvre(Oeuvre oeuvre, String loginId) throws CategorieNotFoundException;
 
-    Collection<Oeuvre> getAllOeuvreByTitre(String titre);
+    Oeuvre modifierOeuvreTitre(Oeuvre oeuvre, Long idOeuvre, String loginId) throws OeuvreNotFoundException, UtilisateurIncorrectException;
 
-    Categorie getCategorieByNomcategorie(String nomCategorie);
+    void suppressionOeuvre(Long id, AccessToken token) throws OeuvreNotFoundException, UtilisateurIncorrectException;
 
-    Collection<Oeuvre> getAllOeuvreByCategorie(Categorie categorie);
-
-    //void modifierOeuvreTitre(String title);
-
-    //Oeuvre getOeuvreByUser(User user);
-
+    Resource telechargerImage(Long imageId);
 }

@@ -14,7 +14,7 @@ services:
 
   dcmysql-art:
     container_name: dcmysql-art
-    image: mysql:latest
+    build: mysql/
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=art
