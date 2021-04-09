@@ -27,7 +27,7 @@ public class CategorieControleur {
     @Autowired
     private ModelMapper mapper;
 
-    @GetMapping(value = "/oeuvres/categorie/")
+    @GetMapping(value = "/oeuvres/categorie")
     public ResponseEntity<?> getAllCategorie(){
         Collection<Categorie> categories = categorieService.getAllCategorie();
         Collection<CategorieDTO> categorieDTO= categories.stream()
