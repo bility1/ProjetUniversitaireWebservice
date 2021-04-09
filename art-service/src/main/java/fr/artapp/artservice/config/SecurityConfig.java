@@ -39,17 +39,15 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         super.configure(http);
         http.authorizeRequests()
                                      //il faut être authentifie pour avoir acces a oeuvre/
-                .antMatchers(HttpMethod.POST,"/oeuvres/**").authenticated()
+                .antMatchers(HttpMethod.POST,"/oeuvres").authenticated()
                 .antMatchers(HttpMethod.DELETE,"/oeuvres/**").authenticated()
                 .antMatchers(HttpMethod.DELETE,"/oeuvres/categorie/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT,"/oeuvres/categorie/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST,"/oeuvres/categorie").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST,"/oeuvres/categorie/**").hasRole("ADMIN")
+                .antMatchers("/oeuvres/proposition").authenticated()
                 .antMatchers(HttpMethod.DELETE,"/oeuvres/categorie/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE,"/oeuvres/proposition").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE,"/oeuvres/proposition/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE,"/oeuvres/proposition/").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST,"/oeuvres/proposition/").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/oeuvres/proposition/**").hasRole("ADMIN")
                 .anyRequest()
                 .permitAll();
         http.csrf().disable();
