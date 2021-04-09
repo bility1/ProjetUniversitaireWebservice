@@ -1,0 +1,8 @@
+fr.artapp.artservice
+fr.artapp.artservice.config
+fr.artapp.artservice.controller
+fr.artapp.artservice.DTO
+fr.artapp.artservice.Exception
+fr.artapp.artservice.model
+fr.artapp.artservice.repository
+fr.artapp.artservice.service
